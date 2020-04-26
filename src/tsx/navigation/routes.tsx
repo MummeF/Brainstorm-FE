@@ -2,6 +2,7 @@ import React from "react";
 import Home from "../views/home";
 import { Route } from "react-router-dom";
 import Kontakt from "../views/kontakt";
+import Login from "../views/login";
 
 interface InternalRoute {
     path: string;
@@ -22,6 +23,12 @@ const routes: InternalRoute[] = [
         path: "/contact",
         name: "Kontakt",
         child: <Kontakt></Kontakt>,
+        exact: true
+    },
+    {
+        path: "/login",
+        name: "Login",
+        child: <Login></Login>,
         exact: true
     },
 ]
