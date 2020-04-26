@@ -42,6 +42,12 @@ export default function Footer() {
                 <Grid item xs className={classes.footer}>
                     <Button color="primary" variant="text" startIcon={<HomeIcon />} component={NavLink} to="/contact">Kontakt</Button>
                 </Grid>
+                <Grid item xs className={classes.footer}>
+                    <Button color="primary" variant="text" startIcon={<HomeIcon />} component={NavLink} to="/login">Login</Button>
+                </Grid>
+                <Grid item xs className={classes.footer}>
+                    <Button color="primary" variant="text" startIcon={<HomeIcon />} component={NavLink} to="/createSession">Session erstellen</Button>
+                </Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={6} className={classes.footerText}> <Typography variant="h6">© 2020 Brainstorm &nbsp;</Typography></Grid>
             </Grid>
