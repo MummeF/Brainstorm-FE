@@ -3,7 +3,8 @@ import Home from "../views/home";
 import { Route } from "react-router-dom";
 import Kontakt from "../views/kontakt";
 import Login from "../views/login";
-import CreateSession from "../views/createSession";
+import CreateRoom from "../views/createRoom";
+import PrettyLittleSite from "../views/prettyLittleSite";
 
 interface InternalRoute {
     path: string;
@@ -33,9 +34,15 @@ const routes: InternalRoute[] = [
         exact: true
     },
     {
-        path: "/createSession",
-        name: "Session",
-        child: <CreateSession></CreateSession>,
+        path: "/createRoom",
+        name: "Raum erstellen",
+        child: <CreateRoom></CreateRoom>,
+        exact: true
+    },
+    {
+        path: "/prettyLittleSite",
+        name: "Pretty Little Site",
+        child: <PrettyLittleSite start={0}></PrettyLittleSite>,
         exact: true
     },
 ]

@@ -9,8 +9,12 @@ import {  indigo, teal, grey } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
   palette: {
-    primary: indigo,
-    secondary: teal,
+    primary: {
+      main: "#a5d6a7",
+    },
+    secondary:  {
+      main: "#757575",
+    },
     background:{
       paper: grey[100]
     }

@@ -35,11 +35,11 @@ export default function Home() {
             <br/>
             <Paper elevation={1} className={classes.btnPaper}>
                 <Grid container spacing={3}>
-                    <Grid item xs>
+                    <Grid item xs={6}>
                         <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/login">Login</Button>
                     </Grid>
-                    <Grid item xs>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/createSession">Session erstellen</Button>
+                    <Grid item xs={6}>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/createRoom">Raum erstellen</Button>
                     </Grid>
                 </Grid>
             </Paper>
