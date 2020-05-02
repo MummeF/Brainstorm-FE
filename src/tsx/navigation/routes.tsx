@@ -5,6 +5,7 @@ import Kontakt from "../views/kontakt";
 import Login from "../views/login";
 import CreateRoom from "../views/createRoom";
 import PrettyLittleSite from "../views/prettyLittleSite";
+import Room from "../views/room";
 
 interface InternalRoute {
     path: string;
@@ -43,6 +44,12 @@ const routes: InternalRoute[] = [
         path: "/prettyLittleSite",
         name: "Pretty Little Site",
         child: <PrettyLittleSite start={0}></PrettyLittleSite>,
+        exact: true
+    },
+    {
+        path: "/room",
+        name: "Raum",
+        child: <Room></Room>,
         exact: true
     },
 ]

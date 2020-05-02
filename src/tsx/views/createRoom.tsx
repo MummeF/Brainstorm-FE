@@ -57,10 +57,16 @@ class CreateRoom extends Component {
     render() {
       return (
         <>
-        <Typography variant="h3"> Raum erstellen</Typography>
+        <Typography variant="h3">Ein Meeting erstellen</Typography>
         <br></br>
-        <Button variant="contained" color="primary" href="#contained-buttons" onClick={this.componentDidMount}>
+        <Button variant="contained" color="primary" onClick={this.componentDidMount}>
             Raum erstellen
+        </Button>
+        <br></br>
+        <br></br>
+        <br></br>
+        <Button variant="contained" color="primary" href="http://localhost:3000/room">
+            Teilnehmen
         </Button>
          </>
       );

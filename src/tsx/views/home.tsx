@@ -36,10 +36,10 @@ export default function Home() {
             <Paper elevation={1} className={classes.btnPaper}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/login">Login</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/login">Meeting teilnehmen</Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/createRoom">Raum erstellen</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/createRoom">Meeting erstellen</Button>
                     </Grid>
                 </Grid>
             </Paper>
