@@ -7,7 +7,7 @@ export default function Login() {
         <Typography variant="h3"> Login Seite</Typography>
         <br></br>
         <form noValidate autoComplete="off">
-            <TextField id="session" label="Session-ID eingeben" variant="outlined" />
+            <TextField id="session" label="Raum-ID eingeben" variant="outlined" />
         </form>
     </>
 }
