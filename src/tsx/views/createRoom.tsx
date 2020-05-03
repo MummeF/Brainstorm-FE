@@ -1,76 +1,64 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { Typography, TextField, Button } from "@material-ui/core";
+import getFromBackend, { getJsonFromBackend } from '../tools/fetching';
+import { RND_ROOM_ID } from '../tools/connections';
 
-const API = 'https://hn.algolia.com/api/v1/search?query=';
-const DEFAULT_QUERY = 'redux';
 
-class CreateRoom extends Component {
 
-    /*
-    constructor(props) {
-        super(props);
-     
-        this.state = {
-          hits: [],
-          isLoading: false,
-          error: null,
-        };
-      }
-     
-      componentDidMount() {
-        this.setState({ isLoading: true });
-     
-        axios.get(API + DEFAULT_QUERY)
-          .then(result => this.setState({
-            hits: result.data.hits,
-            isLoading: false
-          }))
-          .catch(error => this.setState({
-            error,
-            isLoading: false
-          }));
-      }
-      */
+interface Room {
+  id: number;
+}
 
-    
-    state = {
-      id: []
-    }
-  
-    sayHello() {
-      alert('Hello!');
-    }
-    
-    componentDidMount() {
-      fetch('http://jsonplaceholder.typicode.com/todos')
-      //fetch('http://localhost:8080/isAlive')
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({ todos: data })
-        console.log(this.state.id)
-      })
-      .catch(console.log)
-    }
-    
+interface Props {
 
-    render() {
-      return (
-        <>
+}
+interface State {
+  fetched: boolean;
+  id: number | undefined;
+}
+
+class CreateRoom extends React.Component<Props, State>{
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      fetched: false,
+      id: undefined,
+    };
+  }
+  render() {
+
+
+    return (
+      <>
         <Typography variant="h3">Ein Meeting erstellen</Typography>
         <br></br>
-        <Button variant="contained" color="primary" onClick={this.componentDidMount}>
-            Raum erstellen
+        <Button variant="contained" color="primary"
+          onClick={() =>
+            getJsonFromBackend(RND_ROOM_ID)
+              .then(data => {
+                console.log(data)
+                this.setState({ fetched: true, id: data.id })
+              }
+              )}>
+          Raum erstellen
+      </Button>
+        {
+          this.state.fetched ?
+            <>
+              <br />
+              <br />
+              <Typography>Deine Raum-ID: {this.state.id}</Typography>
+              <Button variant="contained" color="primary" href="/room">
+                Teilnehmen
         </Button>
-        <br></br>
-        <br></br>
-        <br></br>
-        <Button variant="contained" color="primary" href="http://localhost:3000/room">
-            Teilnehmen
-        </Button>
-         </>
-      );
-    }
+            </>
+            : <></>
+        }
+
+      </>
+    );
   }
-  
-  export default CreateRoom;
+}
+
+
+export default CreateRoom;
