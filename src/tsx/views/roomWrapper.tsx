@@ -3,6 +3,7 @@ import { RouteComponentProps, Redirect } from "react-router-dom";
 import Room from "./room";
 import { getJsonFromBackend } from "../tools/fetching";
 import { VAL_ROOM_ID } from "../tools/connections";
+import CustomLoader from "../components/customLoader";
 
 type TParams = { id: string }
 
@@ -28,7 +29,7 @@ export default function RoomWrapper({ match }: RouteComponentProps<TParams>) {
                 return <Redirect to={{ pathname: '/login' }}></Redirect>
             }
         } else {
-            return null; //insert loader
+            return <CustomLoader></CustomLoader>; //insert loader
         }
     } else {
         return <Redirect to={{ pathname: '/login' }}></Redirect>

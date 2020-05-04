@@ -3,6 +3,7 @@ import { Typography, Grid, Button, Paper, useTheme, makeStyles } from "@material
 import { NavLink } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
+import CustomLoader from "../components/customLoader";
 
 
 export default function Home() {
