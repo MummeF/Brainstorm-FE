@@ -50,7 +50,7 @@ const routes: InternalRoute[] = [
         path: "/room",
         name: "Raum",
         child: <Room></Room>,
-        exact: true
+        exact: false
     },
 ]
 

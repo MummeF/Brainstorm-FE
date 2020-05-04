@@ -1,7 +1,8 @@
 import React from "react";
 import { Typography, Grid, Button, Paper, useTheme, makeStyles } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
-import HomeIcon from '@material-ui/icons/Home';
+import AddIcon from '@material-ui/icons/Add';
+import GroupIcon from '@material-ui/icons/Group';
 
 
 export default function Home() {
@@ -36,10 +37,10 @@ export default function Home() {
             <Paper elevation={1} className={classes.btnPaper}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/login">Meeting teilnehmen</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/login">Meeting teilnehmen</Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<HomeIcon />} component={NavLink} to="/createRoom">Meeting erstellen</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<AddIcon />} component={NavLink} to="/createRoom">Meeting erstellen</Button>
                     </Grid>
                 </Grid>
             </Paper>

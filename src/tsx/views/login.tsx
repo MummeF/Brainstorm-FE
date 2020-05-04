@@ -1,23 +1,61 @@
 import React from "react";
-import { Typography, Grid, Button, Paper, useTheme, makeStyles, TextField } from "@material-ui/core";
-import { NavLink } from "react-router-dom";
-import HomeIcon from '@material-ui/icons/Home';
+import { Typography, Grid, Button, TextField } from "@material-ui/core";
+import SendIcon from '@material-ui/icons/Send';
+import { getJsonFromBackend } from "../tools/fetching";
+import { VAL_ROOM_ID } from "../tools/connections";
+import {  Redirect } from "react-router-dom";
+
+interface Props {
+
+}
+interface State {
+    verified: boolean;
+    tried: boolean;
+    roomId: string;
+}
 
 
 
-export default function Login() {
+export default class Login extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            verified: false,
+            tried: false,
+            roomId: '',
+        }
+    }
 
-    return <>
-        <Typography variant="h3">An Meeting teilnehmen</Typography>
-        <br></br>
-        <form noValidate autoComplete="off" action="http://localhost:3000/room">
-            <TextField id="session" label="Meeting-ID eingeben" variant="outlined" />
-            {/*<input id="session" type="submit" value="Los" />*/}
-        </form>
-        <br></br>
-        <br></br>
-        <Button variant="contained" color="primary" href="http://localhost:3000/room">
-            Los
-        </Button>
-    </>
+    checkInput(eventValue: string) {
+        if (eventValue != null) {
+            let roomId = eventValue;
+            if (roomId != '') {
+                getJsonFromBackend(VAL_ROOM_ID + '?roomId=' + roomId)
+                    .then(res => this.setState({ verified: res, roomId: res === true ? roomId : '' }));
+            }
+        }
+    }
+
+    render() {
+        if (this.state.tried && this.state.verified) {
+            return (<Redirect
+                to={{
+                    pathname: "/room/" + this.state.roomId
+                }}
+            />)
+        } else {
+            return (<>
+                <Typography variant="h3">An Meeting teilnehmen</Typography>
+                <br />
+                <Grid container direction="row" alignItems="center" spacing={2}>
+                    <Grid item> <TextField id="roomId" label="Meeting-ID eingeben" variant="outlined" onChange={event => this.checkInput(event.target.value)} /></Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={() => this.setState({ tried: true })} endIcon={<SendIcon></SendIcon>}>
+                            Los
+                    </Button>
+                    </Grid>
+                </Grid>
+            </>)
+        }
+    }
 }
