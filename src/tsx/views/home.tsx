@@ -3,7 +3,6 @@ import { Typography, Grid, Button, Paper, useTheme, makeStyles } from "@material
 import { NavLink } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
-import CustomLoader from "../components/customLoader";
 
 
 export default function Home() {
@@ -25,7 +24,6 @@ export default function Home() {
         },
 
     });
-
     const classes = useStyles();
     return <>
         <div className={classes.root}>
@@ -33,15 +31,15 @@ export default function Home() {
             <br />
             <br />
             <Typography variant="body1">Erstelle einen Raum, oder tritt einem bei!</Typography>
-            <br/>
-            <br/>
+            <br />
+            <br />
             <Paper elevation={1} className={classes.btnPaper}>
                 <Grid container spacing={3}>
                     <Grid item xs={6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/login">Meeting teilnehmen</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/login">Raum beitreten</Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<AddIcon />} component={NavLink} to="/createRoom">Meeting erstellen</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<AddIcon />} component={NavLink} to="/createRoom">Raum erstellen</Button>
                     </Grid>
                 </Grid>
             </Paper>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Typography, TextField, Button } from "@material-ui/core";
-import getFromBackend, { getJsonFromBackend } from '../tools/fetching';
+import { Typography,  Button } from "@material-ui/core";
+import  { getJsonFromBackend } from '../tools/fetching';
 import { RND_ROOM_ID } from '../tools/connections';
 import { Redirect } from 'react-router-dom';
 
@@ -36,14 +36,13 @@ class CreateRoom extends React.Component<Props, State>{
     } else {
       return (
         <>
-          <Typography variant="h3">Ein Meeting erstellen</Typography>
+          <Typography variant="h3">Einen Raum erstellen</Typography>
           <br></br>
           <Button variant="contained" color="primary"
             onClick={() =>
               getJsonFromBackend(RND_ROOM_ID)
                 .then(data => {
-                  console.log(data)
-                  this.setState({ fetched: true, roomId: data.id })
+                  this.setState({ fetched: true, roomId: data })
                 }
                 )}>
             Raum erstellen

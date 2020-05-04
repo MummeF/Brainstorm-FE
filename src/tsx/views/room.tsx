@@ -1,30 +1,98 @@
-import React from "react";
-import { Typography } from "@material-ui/core";
-import getFromBackend from "../tools/fetching";
+import React, { useState } from "react";
+import { getJsonFromBackend } from "../tools/fetching";
+import { RouteComponentProps, Redirect } from "react-router-dom";
+import { VAL_ROOM_ID, GET_ROOM } from "../tools/connections";
+import CustomLoader from "../components/customLoader";
+import RoomModel from "../model/roomModel";
+import RoomPaper from "../components/roomPaper";
 
 interface Props {
     id: number;
 }
 interface State {
-    id: number;
-    thema?: string;
+    room?: RoomModel;
 }
-export default class Room extends React.Component<Props, State> {
+class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            id: this.props.id,
+
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         //fetch room data
+        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+            .then(room => this.setState({ room }))
+    }
+    componentDidUpdate() {
+        //fetch room data
+        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+            .then(room => this.setState({ room }))
+        console.log(this.state.room)
     }
 
 
     render() {
-        return (<>
-            <Typography variant="h3">Raum{' ' + this.state.id}</Typography>
-        </>);
+        if (this.state.room) {
+            return (<>
+                <RoomPaper room={this.state.room!}></RoomPaper>
+            </>);
+        }else{
+            return <CustomLoader></CustomLoader>
+        }
+
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+type TParams = { id: string }
+
+
+export default function Room({ match }: RouteComponentProps<TParams>) {
+    const [verified, setVerified] = useState(-1);
+
+    if (match.params) {
+        let id: string = match.params.id;
+
+        getJsonFromBackend(VAL_ROOM_ID + '?roomId=' + id)
+            .then(res => {
+                if (res === true) {
+                    setVerified(1);
+                } else {
+                    setVerified(0);
+                }
+            });
+        if (verified !== -1) {
+            if (verified === 1) {
+                return <RoomRaw id={+id}></RoomRaw>
+            } else {
+                return <Redirect to={{ pathname: '/login' }}></Redirect>
+            }
+        } else {
+            return <CustomLoader></CustomLoader>;
+        }
+    } else {
+        return <Redirect to={{ pathname: '/login' }}></Redirect>
+    }
+
 }

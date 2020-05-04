@@ -3,7 +3,7 @@ import { Typography, Grid, Button, TextField } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
 import { getJsonFromBackend } from "../tools/fetching";
 import { VAL_ROOM_ID } from "../tools/connections";
-import {  Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 interface Props {
 
@@ -27,9 +27,9 @@ export default class Login extends React.Component<Props, State> {
     }
 
     checkInput(eventValue: string) {
-        if (eventValue != null) {
+        if (eventValue !== null) {
             let roomId = eventValue;
-            if (roomId != '') {
+            if (roomId !== '') {
                 getJsonFromBackend(VAL_ROOM_ID + '?roomId=' + roomId)
                     .then(res => this.setState({ verified: res, roomId: res === true ? roomId : '' }));
             }
@@ -45,10 +45,10 @@ export default class Login extends React.Component<Props, State> {
             />)
         } else {
             return (<>
-                <Typography variant="h3">An Meeting teilnehmen</Typography>
+                <Typography variant="h3">Einem Raum beitreten</Typography>
                 <br />
                 <Grid container direction="row" alignItems="center" spacing={2}>
-                    <Grid item> <TextField id="roomId" label="Meeting-ID eingeben" variant="outlined" onChange={event => this.checkInput(event.target.value)} /></Grid>
+                    <Grid item> <TextField id="roomId" label="Raum-ID eingeben" variant="outlined" onChange={event => this.checkInput(event.target.value)} /></Grid>
                     <Grid item>
                         <Button variant="contained" color="primary" onClick={() => this.setState({ tried: true })} endIcon={<SendIcon></SendIcon>}>
                             Los

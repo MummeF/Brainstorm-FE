@@ -1,12 +1,11 @@
 import React from "react";
 import Home from "../views/home";
-import { Route, match } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Kontakt from "../views/kontakt";
 import Login from "../views/login";
 import CreateRoom from "../views/createRoom";
 import PrettyLittleSite from "../views/prettyLittleSite";
 import Room from "../views/room";
-import RoomWrapper from "../views/roomWrapper";
 
 interface InternalRoute {
     path: string;
@@ -51,7 +50,7 @@ const routes: InternalRoute[] = [
     {
         path: "/room/:id",
         name: "Raum",
-        component: RoomWrapper,
+        component: Room,
         exact: true
     },
 ]

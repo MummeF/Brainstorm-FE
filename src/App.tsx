@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import Root from './Root';
-import {  indigo, teal, grey } from '@material-ui/core/colors';
+import {  grey } from '@material-ui/core/colors';
 
 
 
