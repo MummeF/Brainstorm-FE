@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, TextField, Button } from "@material-ui/core";
 import getFromBackend, { getJsonFromBackend } from '../tools/fetching';
 import { RND_ROOM_ID } from '../tools/connections';
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -14,7 +15,8 @@ interface Props {
 }
 interface State {
   fetched: boolean;
-  id: number | undefined;
+  redirect: boolean;
+  roomId: number | undefined;
 }
 
 class CreateRoom extends React.Component<Props, State>{
@@ -22,41 +24,45 @@ class CreateRoom extends React.Component<Props, State>{
     super(props);
     this.state = {
       fetched: false,
-      id: undefined,
+      roomId: undefined,
+      redirect: false,
     };
   }
   render() {
-
-
-    return (
-      <>
-        <Typography variant="h3">Ein Meeting erstellen</Typography>
-        <br></br>
-        <Button variant="contained" color="primary"
-          onClick={() =>
-            getJsonFromBackend(RND_ROOM_ID)
-              .then(data => {
-                console.log(data)
-                this.setState({ fetched: true, id: data.id })
-              }
-              )}>
-          Raum erstellen
-      </Button>
-        {
-          this.state.fetched ?
-            <>
-              <br />
-              <br />
-              <Typography>Deine Raum-ID: {this.state.id}</Typography>
-              <Button variant="contained" color="primary" href="/room">
-                Teilnehmen
-        </Button>
-            </>
-            : <></>
-        }
-
-      </>
-    );
+    if (this.state.redirect) {
+      return <Redirect to={{
+        pathname: "/room/" + this.state.roomId
+      }}></Redirect>
+    } else {
+      return (
+        <>
+          <Typography variant="h3">Ein Meeting erstellen</Typography>
+          <br></br>
+          <Button variant="contained" color="primary"
+            onClick={() =>
+              getJsonFromBackend(RND_ROOM_ID)
+                .then(data => {
+                  console.log(data)
+                  this.setState({ fetched: true, roomId: data.id })
+                }
+                )}>
+            Raum erstellen
+          </Button>
+          {
+            this.state.fetched ?
+              <>
+                <br />
+                <br />
+                <Typography>Deine Raum-ID: {this.state.roomId}</Typography>
+                <Button variant="contained" color="primary" onClick={() => this.setState({ redirect: true })}>
+                  Teilnehmen
+                </Button>
+              </>
+              : <></>
+          }
+        </>
+      );
+    }
   }
 }
 
