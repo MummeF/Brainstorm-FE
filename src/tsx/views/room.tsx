@@ -26,6 +26,11 @@ class RoomRaw extends React.Component<Props, State> {
         getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
             .then(room => this.setState({ room }))
     }
+    componentDidUpdate() {
+        //fetch room data
+        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+            .then(room => this.setState({ room }))
+    }
     updateRoom() {
         getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
             .then(room => this.setState({ room }));
