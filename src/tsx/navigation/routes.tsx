@@ -1,17 +1,19 @@
 import React from "react";
 import Home from "../views/home";
-import { Route } from "react-router-dom";
+import { Route, match } from "react-router-dom";
 import Kontakt from "../views/kontakt";
 import Login from "../views/login";
 import CreateRoom from "../views/createRoom";
 import PrettyLittleSite from "../views/prettyLittleSite";
 import Room from "../views/room";
+import RoomWrapper from "../views/roomWrapper";
 
 interface InternalRoute {
     path: string;
     exact: boolean;
     name: string;
-    child: JSX.Element;
+    child?: JSX.Element;
+    component?: any; //Not recommended!! Use Only for dynamic routes!
     icon?: JSX.Element;
 }
 
@@ -47,10 +49,10 @@ const routes: InternalRoute[] = [
         exact: true
     },
     {
-        path: "/room",
+        path: "/room/:id",
         name: "Raum",
-        child: <Room></Room>,
-        exact: false
+        component: RoomWrapper,
+        exact: true
     },
 ]
 
@@ -62,12 +64,19 @@ export default function Routes() {
     const name = nameForPath(window.location.pathname);
     window.document.title = "Brainstorm" + (name !== undefined ? " - " + name : "");
 
-    
+
 
     let displayedRoutes: JSX.Element[] = [];
     routes.forEach((route => {
-        displayedRoutes.push(route.exact ? <Route exact path={route.path} children={route.child}></Route>
-            : <Route path={route.path} children={route.child}></Route>)
+        if (route.child) {
+            displayedRoutes.push(route.exact ? <Route exact path={route.path} children={route.child}></Route>
+                : <Route path={route.path} children={route.child}></Route>)
+        } else if (route.component) {
+            displayedRoutes.push(route.exact ? <Route exact path={route.path} component={route.component}></Route>
+                : <Route path={route.path} children={route.component}></Route>)
+        } else {
+            console.error('No component defined.')
+        }
     }));
 
 
