@@ -11,12 +11,13 @@ interface Props {
 }
 interface State {
     room?: RoomModel;
+    updating: boolean;
 }
 class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-
+            updating: false
         }
     }
 
@@ -25,20 +26,17 @@ class RoomRaw extends React.Component<Props, State> {
         getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
             .then(room => this.setState({ room }))
     }
-    componentDidUpdate() {
-        //fetch room data
+    updateRoom() {
         getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
-            .then(room => this.setState({ room }))
-        console.log(this.state.room)
+            .then(room => this.setState({ room }));
     }
-
 
     render() {
         if (this.state.room) {
             return (<>
-                <RoomPaper room={this.state.room!}></RoomPaper>
+                <RoomPaper updateRoom={this.updateRoom.bind(this)} room={this.state.room!}></RoomPaper>
             </>);
-        }else{
+        } else {
             return <CustomLoader></CustomLoader>
         }
 

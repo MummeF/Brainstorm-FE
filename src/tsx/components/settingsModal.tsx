@@ -9,6 +9,7 @@ interface Props {
     open: boolean;
     handleClose(): void;
     room: RoomModel;
+    updateParentRoom(): void;
 }
 
 
@@ -39,6 +40,7 @@ export default class SettingsModal extends React.Component<Props, RoomModel> {
             <>
                 <StyledModal open={this.props.open} body={body} handleClose={() => {
                     updateRoom(this.state)
+                    this.props.updateParentRoom();
                     this.props.handleClose();
                 }} title="Settings"></StyledModal>
             </>);

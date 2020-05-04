@@ -6,6 +6,7 @@ import SettingsModal from "./settingsModal";
 
 interface Props {
     room: RoomModel
+    updateRoom(): void;
 }
 
 interface State {
@@ -28,9 +29,8 @@ export default class RoomPaper extends React.Component<Props, State>{
             this.setState({ settingsOpen: true })
         }
         const room = this.props.room;
-        console.log(this.props.room)
         return (<>
-            <SettingsModal open={this.state.settingsOpen} room={this.props.room} handleClose={handleClose}></SettingsModal>
+            <SettingsModal updateParentRoom={this.props.updateRoom} open={this.state.settingsOpen} room={this.props.room} handleClose={handleClose}></SettingsModal>
             <Grid container justify="space-between" direction="row">
                 <Grid item><Typography variant="h3">Raum{' ' + (room.topic ? room.topic : room.id)}</Typography></Grid>
                 <Grid item><Button variant="text" color="primary" endIcon={<SettingsIcon />} onClick={handleOpen}>Raum bearbeiten</Button></Grid>
