@@ -1,7 +1,7 @@
 import React from "react";
 import RoomModel from "../model/roomModel";
 import { Typography, TextField } from "@material-ui/core";
-import { StyledModal } from "./styledModal";
+import { StyledModalCopy } from "./styledModalCopy";
 import { updateRoom, getJsonFromBackend } from "../tools/fetching";
 import { GET_ROOM } from "../tools/connections";
 
@@ -41,11 +41,11 @@ export default class InputModal extends React.Component<Props, RoomModel> {
         </>)
         return (
             <>
-                <StyledModal open={this.props.open} body={body} handleClose={() => {
+                <StyledModalCopy open={this.props.open} body={body} handleClose={() => {
                     updateRoom(this.state)
                     this.props.updateParentRoom();
                     this.props.handleClose();
-                }} title="Beitrag hinzufügen"></StyledModal>
+                }} title="Beitrag hinzufügen"></StyledModalCopy>
             </>);
     }
 }

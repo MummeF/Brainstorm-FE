@@ -1,6 +1,7 @@
 import React from "react";
-import { Modal, useTheme, makeStyles, Grid, Paper, AppBar, Toolbar, Button, Typography } from "@material-ui/core";
+import { Modal, useTheme, makeStyles, Grid, Paper, AppBar, Toolbar, Button, Typography, Icon } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
 interface Props {
     open: boolean;
     handleClose(): void;
@@ -12,7 +13,7 @@ interface State {
 
 }
 
-class StyledModalRaw extends React.Component<Props> {
+class StyledModalRawCopy extends React.Component<Props> {
     render() {
         const body = this.props.body;
         const classes = this.props.classes;
@@ -42,11 +43,11 @@ class StyledModalRaw extends React.Component<Props> {
                                             <Grid item><Typography variant="h3">{this.props.title}</Typography></Grid>
                                             <Grid item>
                                                 <Button
-                                                    className={classes.closeBtn}
+                                                    
                                                     color="primary"
                                                     variant="text"
                                                     onClick={this.props.handleClose}
-                                                    endIcon={<CloseIcon />}>Close</Button>
+                                                    endIcon={<CloseIcon />}></Button>
                                             </Grid>
                                         </Grid>
                                     </Toolbar>
@@ -54,6 +55,20 @@ class StyledModalRaw extends React.Component<Props> {
                             </Grid>
                             <Grid item className={classes.body}>
                                 {body ? body : <></>}
+                                <Grid item>
+                                                
+                                    </Grid>
+                                    <br></br>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        onClick={this.props.handleClose}
+                                        className={classes.button}
+                                        startIcon={<SaveIcon />}
+                                    >
+                                        Speichern
+                                    </Button>
                             </Grid>
                         </Grid>
                     </>
@@ -67,7 +82,7 @@ interface RawProps {
     title?: string;
     handleClose(): void;
 }
-export const StyledModal = (props: RawProps) => {
+export const StyledModalCopy = (props: RawProps) => {
     const theme = useTheme();
 
     const useStyles = makeStyles({
@@ -92,10 +107,10 @@ export const StyledModal = (props: RawProps) => {
     });
     const classes = useStyles();
 
-    return <StyledModalRaw
+    return <StyledModalRawCopy
         title={props.title}
         open={props.open} body={props.body}
         handleClose={props.handleClose}
         classes={classes}
-    ></StyledModalRaw>
+    ></StyledModalRawCopy>
 }
