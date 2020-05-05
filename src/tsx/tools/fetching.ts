@@ -1,5 +1,6 @@
-import { BACKEND_URL, CORS_ANYWHERE, BACKEND_LOCAL, IS_ALIVE, UPDT_ROOM } from "./connections"
+import { BACKEND_URL, CORS_ANYWHERE, BACKEND_LOCAL, IS_ALIVE, UPDT_ROOM, ADD_CTRBT } from "./connections"
 import RoomModel from "../model/roomModel";
+import Contribution from "../model/contribution";
 
 const user = 'fe-tech-user'
 const pass = '+vq#3RL!ygE%f&HLM?t_'
@@ -33,6 +34,24 @@ export function postDataToBackend(path: string, data: any): Promise<any> {
     });
 }
 
+export async function addContribution(roomId: number, contributionText: string) {
+    let added: boolean = false;
+    let contribution: Contribution = {
+        content: contributionText,
+        id: -1
+    }
+    await postDataToBackend(ADD_CTRBT + '?roomId=' + roomId, contribution)
+        .then(res => {
+            if (res.ok) {
+                added = true
+            } else {
+                added = false
+            }
+        })
+        .catch(res => added = false)
+    return added;
+}
+
 export async function updateRoom(room: RoomModel): Promise<boolean> {
     let updated: boolean = false;
     await postDataToBackend(UPDT_ROOM, room)
@@ -49,9 +68,6 @@ export async function updateRoom(room: RoomModel): Promise<boolean> {
 
 export async function backendOnline(): Promise<boolean> {
     let online: boolean = false;
-    // await timeoutPromise(2000, getFromBackend(IS_ALIVE))
-    //     .then(res => online = true)
-    //     .catch(res => online = false)
     await getFromBackend(IS_ALIVE)
         .then(res => {
             if (res.ok) {

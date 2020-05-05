@@ -9,7 +9,7 @@ export default class Header extends React.Component {
 
     render() {
         return <>
-            <AppBar position="static">
+            <AppBar position="sticky">
                 <Toolbar>
                     <Button color="primary" variant="text" startIcon={<HomeIcon />} component={NavLink} to="/">Home</Button>
                 </Toolbar>
