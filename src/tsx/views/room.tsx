@@ -5,6 +5,8 @@ import { VAL_ROOM_ID, GET_ROOM } from "../tools/connections";
 import CustomLoader from "../components/customLoader";
 import RoomModel from "../model/roomModel";
 import RoomPaper from "../components/roomPaper";
+import InputWindow from "../components/inputWindow";
+import { Grid, Typography, Button } from "@material-ui/core";
 
 interface Props {
     id: number;
@@ -39,6 +41,8 @@ class RoomRaw extends React.Component<Props, State> {
         if (this.state.room) {
             return (<>
                 <RoomPaper updateRoom={this.updateRoom.bind(this)} room={this.state.room!}></RoomPaper>
+                <br></br>
+                <InputWindow updateRoom={this.updateRoom.bind(this)} room={this.state.room!}></InputWindow>
             </>);
         } else {
             return <CustomLoader></CustomLoader>

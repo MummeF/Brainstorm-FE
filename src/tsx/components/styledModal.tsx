@@ -1,6 +1,7 @@
 import React from "react";
-import { Modal, useTheme, makeStyles, Grid, Paper, AppBar, Toolbar, Button, Typography } from "@material-ui/core";
+import { Modal, useTheme, makeStyles, Grid, Paper, AppBar, Toolbar, Button, Typography, Icon } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
+import SaveIcon from '@material-ui/icons/Save';
 interface Props {
     open: boolean;
     handleClose(): void;
@@ -42,11 +43,11 @@ class StyledModalRaw extends React.Component<Props> {
                                             <Grid item><Typography variant="h3">{this.props.title}</Typography></Grid>
                                             <Grid item>
                                                 <Button
-                                                    className={classes.closeBtn}
+                                                    
                                                     color="primary"
                                                     variant="text"
                                                     onClick={this.props.handleClose}
-                                                    endIcon={<CloseIcon />}>Close</Button>
+                                                    endIcon={<CloseIcon />}></Button>
                                             </Grid>
                                         </Grid>
                                     </Toolbar>
@@ -54,6 +55,20 @@ class StyledModalRaw extends React.Component<Props> {
                             </Grid>
                             <Grid item className={classes.body}>
                                 {body ? body : <></>}
+                                <Grid item>
+                                                
+                                    </Grid>
+                                    <br></br>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        onClick={this.props.handleClose}
+                                        className={classes.button}
+                                        startIcon={<SaveIcon />}
+                                    >
+                                        Speichern
+                                    </Button>
                             </Grid>
                         </Grid>
                     </>
