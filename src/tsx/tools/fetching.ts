@@ -49,27 +49,36 @@ export async function updateRoom(room: RoomModel): Promise<boolean> {
 
 export async function backendOnline(): Promise<boolean> {
     let online: boolean = false;
-    await timeoutPromise(2000, getFromBackend(IS_ALIVE))
-        .then(res => online = true)
-        .catch(res => online = false)
+    // await timeoutPromise(2000, getFromBackend(IS_ALIVE))
+    //     .then(res => online = true)
+    //     .catch(res => online = false)
+    await getFromBackend(IS_ALIVE)
+        .then(res => {
+            if (res.ok) {
+                online = true;
+            } else {
+                online = false;
+            }
+        })
+        .catch(res => online = false);
     return online;
 }
 
 
-function timeoutPromise(ms: number, promise: Promise<any>) {
-    return new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => {
-            reject(new Error("promise timeout"))
-        }, ms);
-        promise.then(
-            (res) => {
-                clearTimeout(timeoutId);
-                resolve(res);
-            },
-            (err) => {
-                clearTimeout(timeoutId);
-                reject(err);
-            }
-        );
-    })
-}
+// function timeoutPromise(ms: number, promise: Promise<any>) {
+//     return new Promise((resolve, reject) => {
+//         const timeoutId = setTimeout(() => {
+//             reject(new Error("promise timeout"))
+//         }, ms);
+//         promise.then(
+//             (res) => {
+//                 clearTimeout(timeoutId);
+//                 resolve(res);
+//             },
+//             (err) => {
+//                 clearTimeout(timeoutId);
+//                 reject(err);
+//             }
+//         );
+//     })
+// }
