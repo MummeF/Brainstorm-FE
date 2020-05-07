@@ -16,7 +16,7 @@ const user = 'fe-tech-user'
 const pass = '+vq#3RL!ygE%f&HLM?t_'
 
 
-// const authString = 'Basic ' + new Buffer(user + ':' + pass).toString('base64');
+const authString = 'Basic ' + new Buffer(user + ':' + pass).toString('base64');
 
 export default class WebsocketService {
     private client: Client;
@@ -32,12 +32,11 @@ export default class WebsocketService {
     private constructor() {
         this.client = new Client({
             brokerURL: WEBSOCKET_URL,
-            // debug: function (str: string) {
-            //     console.log('WS debug: ', str);
-            // },
+            debug: function (str: string) {
+                console.log('WS debug: ', str);
+            },
             connectHeaders: {
-                login: user,
-                passcode: pass
+                'Authorization': authString
             },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
