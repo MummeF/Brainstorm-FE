@@ -5,7 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.52",
     "@material-ui/styles": "^4.9.10",
+    "@stomp/stompjs": "^5.4.4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -15,7 +17,8 @@
     "react-loader-spinner": "^3.1.14",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "websocket": "^1.0.31"
   },
   "scripts": {
     "start": "react-scripts start",

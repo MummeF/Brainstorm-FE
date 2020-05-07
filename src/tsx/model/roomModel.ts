@@ -1,7 +1,7 @@
-import Contribution from "./contribution";
+import ContributionModel from "./contributionModel";
 
 export default interface RoomModel{
     id: number;
     topic: string;
-    contributions: Contribution[];
+    contributions: ContributionModel[];
 }

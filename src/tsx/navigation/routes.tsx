@@ -4,7 +4,6 @@ import { Route } from "react-router-dom";
 import Kontakt from "../views/kontakt";
 import Login from "../views/login";
 import CreateRoom from "../views/createRoom";
-import PrettyLittleSite from "../views/prettyLittleSite";
 import Room from "../views/room";
 
 interface InternalRoute {
@@ -42,12 +41,6 @@ const routes: InternalRoute[] = [
         exact: true
     },
     {
-        path: "/prettyLittleSite",
-        name: "Pretty Little Site",
-        child: <PrettyLittleSite start={0}></PrettyLittleSite>,
-        exact: true
-    },
-    {
         path: "/room/:id",
         name: "Raum",
         component: Room,
@@ -66,17 +59,17 @@ export default function Routes() {
 
 
     let displayedRoutes: JSX.Element[] = [];
-    routes.forEach((route => {
+    routes.forEach(route => {
         if (route.child) {
-            displayedRoutes.push(route.exact ? <Route exact path={route.path} children={route.child}></Route>
-                : <Route path={route.path} children={route.child}></Route>)
+            displayedRoutes.push(route.exact ? <Route key={route.path} exact path={route.path} children={route.child}></Route>
+                : <Route key={route.path} path={route.path} children={route.child}></Route>)
         } else if (route.component) {
-            displayedRoutes.push(route.exact ? <Route exact path={route.path} component={route.component}></Route>
-                : <Route path={route.path} children={route.component}></Route>)
+            displayedRoutes.push(route.exact ? <Route key={route.path} exact path={route.path} component={route.component}></Route>
+                : <Route key={route.path} path={route.path} children={route.component}></Route>)
         } else {
             console.error('No component defined.')
         }
-    }));
+    });
 
 
     return <>

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { getJsonFromBackend } from "../tools/fetching";
-import { RouteComponentProps, Redirect } from "react-router-dom";
-import { VAL_ROOM_ID, GET_ROOM } from "../tools/connections";
-import CustomLoader from "../components/customLoader";
+import { Redirect, RouteComponentProps } from "react-router-dom";
+import CustomLoader from "../components/common/customLoader";
+import RoomPaper from "../components/room/roomPaper";
 import RoomModel from "../model/roomModel";
-import RoomPaper from "../components/roomPaper";
+import { VAL_ROOM_ID, WS_SEND, WS_SUB } from "../tools/connections";
+import { getJsonFromBackend } from "../tools/fetching";
+import WebsocketService from "../tools/websocketService";
 
 interface Props {
     id: number;
@@ -12,33 +13,70 @@ interface Props {
 interface State {
     room?: RoomModel;
     updating: boolean;
+    deleted: boolean;
 }
 class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            updating: false
+            updating: false,
+            deleted: false
         }
     }
-
+    private webSocketService?: WebsocketService;
     componentDidMount() {
-        //fetch room data
-        this.updateRoom();
+        this.webSocketService = WebsocketService.getInstance();
+        this.webSocketService.connect(
+            () => {
+                this.webSocketService &&
+                    this.webSocketService.subscribe(
+                        WS_SUB,
+                        message => {
+                            if (message.body) {
+                                if (!message.body.includes('Success') && !message.body.includes('found')) {
+                                    if (message.body.includes('deleted')) {
+                                        this.setState({ deleted: true });
+                                    } else {
+                                        try {
+                                            const room = JSON.parse(message.body);
+                                            this.setState({ room: room })
+                                        } catch{
+                                            console.log("Parsing error");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    );
+                this.subscribe(this.props.id);
+            },
+            () => { },
+            () => { }
+        );
     }
-    componentDidUpdate() {
-        // //fetch room data
-        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
-            .then(room => this.setState({ room }))
+
+    componentWillUnmount() {
+        this.webSocketService?.disconnect();
     }
-    updateRoom() {
-        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
-            .then(room => this.setState({ room }));
+
+    private subscribe(roomId: number): void {
+        this.webSocketService &&
+            this.webSocketService.sendMessage(
+                WS_SEND,
+                JSON.stringify({ roomId: roomId })
+            );
     }
 
     render() {
+        if (this.state.deleted) {
+            return <>
+                <Redirect to="/"></Redirect>
+            </>
+        }
+
         if (this.state.room) {
             return (<>
-                <RoomPaper updateRoom={this.updateRoom.bind(this)} room={this.state.room!}></RoomPaper>
+                <RoomPaper room={this.state.room!}></RoomPaper>
             </>);
         } else {
             return <CustomLoader></CustomLoader>

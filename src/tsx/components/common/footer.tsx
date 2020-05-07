@@ -1,9 +1,9 @@
-import React from "react";
-import { makeStyles, Grid, useTheme, Button, Typography } from "@material-ui/core";
-
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import { Button, Grid, makeStyles, useTheme } from "@material-ui/core";
 import HomeIcon from '@material-ui/icons/Home';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import React from "react";
 import { NavLink } from "react-router-dom";
+
 
 export default function Footer() {
     const theme = useTheme();
@@ -42,8 +42,8 @@ export default function Footer() {
                 <Grid item xs className={classes.footer}>
                     <Button color="secondary" variant="text" startIcon={<ImportContactsIcon />} component={NavLink} to="/contact">Kontakt</Button>
                 </Grid>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={6} className={classes.footerText}> <Typography variant="h6">© 2020 Brainstorm &nbsp;</Typography></Grid>
+                {/* <Grid item xs={3}></Grid>
+                <Grid item xs={6} className={classes.footerText}> <Typography variant="h6">© 2020 Brainstorm &nbsp;</Typography></Grid> */}
             </Grid>
         </div>
     </React.Fragment>

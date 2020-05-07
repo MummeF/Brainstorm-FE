@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Footer from "./tsx/components/footer";
+import Footer from "./tsx/components/common/footer";
 import {
     BrowserRouter,
     Switch,
 } from "react-router-dom";
 import Routes from "./tsx/navigation/routes";
 import {  makeStyles, Typography } from "@material-ui/core";
-import Header from "./tsx/components/header";
+import Header from "./tsx/components/common/header";
 import { backendOnline } from "./tsx/tools/fetching";
-import CustomLoader from "./tsx/components/customLoader";
+import CustomLoader from "./tsx/components/common/customLoader";
 
 export default function Root() {
     // const theme = useTheme();

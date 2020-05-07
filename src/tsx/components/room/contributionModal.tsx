@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { StyledModal } from "./styledModal";
-import { Typography, TextField, useTheme, makeStyles, Grid, Dialog, DialogTitle, List, ListItem, ListItemAvatar, Avatar, ListItemText, Fab } from "@material-ui/core";
+import { Dialog, DialogTitle, Fab, Grid, makeStyles, TextField } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
-import { addContribution } from "../tools/fetching";
+import React, { useState } from "react";
+import { addContribution } from "../../tools/fetching";
 
 interface Props {
     open: boolean;
@@ -13,11 +12,12 @@ interface Props {
 export default function ContributionModal(props: Props) {
     const [contributionText, setContributionText] = useState("");
 
-    const theme = useTheme();
+    // const theme = useTheme();
 
     const useStyles = makeStyles({
         root: {
-            width: "30em"
+            width: "30em",
+            maxWidth: "95%",
         },
         body: {
             margin: "auto",
@@ -31,17 +31,19 @@ export default function ContributionModal(props: Props) {
     });
     const classes = useStyles();
     const handleSend = () => {
-        console.log(contributionText);
         addContribution(props.roomId, contributionText);
+    }
+    const closeWithoutSend = () => {
         setContributionText("")
+        props.handleClose();
     }
     const closeAndSend = () => {
         handleSend();
-        props.handleClose();
+        closeWithoutSend();
     }
 
     return (
-        <Dialog onClose={props.handleClose} aria-labelledby="simple-dialog-title" open={props.open}>
+        <Dialog onClose={closeWithoutSend} aria-labelledby="simple-dialog-title" open={props.open}>
             <div className={classes.root}>
                 <DialogTitle id="simple-dialog-title">Neuer Beitrag</DialogTitle>
                 <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">
@@ -57,15 +59,5 @@ export default function ContributionModal(props: Props) {
                 </Grid>
             </div>
         </Dialog>);
-    // const body = (<>
-    // <Grid>
-
-    // </Grid>
-    //     <TextField className={}></TextField>
-    // </>)
-
-    // return <>
-    //     <StyledModal title="Neuer Beitrag" body={body} open={props.open} handleClose={props.handleCLose}></StyledModal>
-    // </>
 
 }

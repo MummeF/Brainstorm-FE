@@ -1,6 +1,6 @@
 import { BACKEND_URL, CORS_ANYWHERE, BACKEND_LOCAL, IS_ALIVE, UPDT_ROOM, ADD_CTRBT } from "./connections"
 import RoomModel from "../model/roomModel";
-import Contribution from "../model/contribution";
+import ContributionModel from "../model/contributionModel";
 
 const user = 'fe-tech-user'
 const pass = '+vq#3RL!ygE%f&HLM?t_'
@@ -20,6 +20,26 @@ export default async function getFromBackend(path: string): Promise<any> {
         headers: headers,
     });
 }
+export async function deleteFromBackend(path: string): Promise<any> {
+    return fetch(domain + path, {
+        method: 'DELETE',
+        headers: headers,
+    });
+}
+export function deleteAndGetJsonFromBackend(path: string): Promise<any> {
+    return deleteFromBackend(path)
+        .then(res => res.json());
+}
+export async function putToBackend(path: string): Promise<any> {
+    return fetch(domain + path, {
+        method: 'PUT',
+        headers: headers,
+    });
+}
+export function putAndGetJsonFromBackend(path: string): Promise<any> {
+    return putToBackend(path)
+        .then(res => res.json());
+}
 
 export function getJsonFromBackend(path: string): Promise<any> {
     return getFromBackend(path)
@@ -36,7 +56,7 @@ export function postDataToBackend(path: string, data: any): Promise<any> {
 
 export async function addContribution(roomId: number, contributionText: string) {
     let added: boolean = false;
-    let contribution: Contribution = {
+    let contribution: ContributionModel = {
         content: contributionText,
         id: -1
     }

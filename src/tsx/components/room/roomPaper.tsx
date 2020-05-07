@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import RoomModel from "../model/roomModel";
-import { Typography, makeStyles, Paper, Grid, Button, Fab } from "@material-ui/core";
-import SettingsIcon from '@material-ui/icons/Settings';
-import SettingsModal from "./settingsModal";
-import Contribution from "./contribution";
-import StyledMessage from "./styledMessage";
+import { Button, Fab, Grid, makeStyles, Paper, Typography, IconButton } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import SettingsIcon from '@material-ui/icons/Settings';
+import React, { useRef, useState } from "react";
+import RoomModel from "../../model/roomModel";
+import StyledMessage from "../common/styledMessage";
+import Contribution from "./contribution";
 import ContributionModal from "./contributionModal";
+import SettingsModal from "./settingsModal";
 
 
 interface Props {
     room: RoomModel
-    updateRoom(): void;
 }
 
 
@@ -22,6 +21,12 @@ export default function RoomPaper(props: Props) {
     // const theme = useTheme();
 
     const useStyles = makeStyles({
+        root: {
+            margin: "auto",
+            width: "80%",
+            minHeight: "10em",
+            padding: "0.5em",
+        },
         contribution: {
             width: "100%",
         },
@@ -40,24 +45,37 @@ export default function RoomPaper(props: Props) {
     const handleContsOpen = () => {
         setContributionOpen(true)
     }
+
+    const isMobile = useRef(window.innerWidth < 480);
+
+
     const room = props.room;
 
     const contributions: JSX.Element[] = []
     room.contributions?.forEach(cont => {
-        contributions.push(<Grid item className={classes.contribution} xs={6}><Contribution content={cont.content}></Contribution></Grid>)
+        contributions.push(<Grid item key={cont.id} className={classes.contribution} xs={isMobile ? 12 : 6}>
+            <Contribution roomId={room.id} contribution={cont}></Contribution>
+        </Grid>)
     })
 
+    const SettingsButton = () => {
+        if (isMobile.current) {
+            return <IconButton aria-label="settingsbutton" onClick={handleSettingsOpen}><SettingsIcon /></IconButton>
+        } else {
+            return <Button variant="text" color="primary" endIcon={<SettingsIcon />} onClick={handleSettingsOpen}>Raum bearbeiten</Button>
+        }
+    }
 
     return (<>
 
-        <SettingsModal updateParentRoom={props.updateRoom} open={settingsOpen} room={props.room} handleClose={handleSettingsClose}></SettingsModal>
+        <SettingsModal open={settingsOpen} room={props.room} handleClose={handleSettingsClose}></SettingsModal>
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
 
         <Grid container justify="space-between" direction="row">
-            <Grid item><Typography variant="h3">Raum{' ' + (room.topic ? room.topic : room.id)}</Typography></Grid>
-            <Grid item><Button variant="text" color="primary" endIcon={<SettingsIcon />} onClick={handleSettingsOpen}>Raum bearbeiten</Button></Grid>
+            <Grid item xs={10}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>
+            <Grid item xs={2}><SettingsButton></SettingsButton></Grid>
         </Grid>
-        <RootPaper>
+        <Paper elevation={1} className={classes.root}>
             <Grid container direction="row" justify="flex-end">
                 <Grid item>
                     <Fab onClick={handleContsOpen} color="primary" aria-label="add">
@@ -74,26 +92,7 @@ export default function RoomPaper(props: Props) {
                     <StyledMessage message="Es wurden noch keine Beiträge geschrieben."></StyledMessage>
                 </>}
             </Grid>
-        </RootPaper>
-    </>);
-
-}
-
-const RootPaper: React.StatelessComponent = props => {
-    // const theme = useTheme();
-
-    const useStyles = makeStyles({
-        root: {
-            margin: "auto",
-            width: "80%",
-            minHeight: "10em",
-            padding: "0.5em",
-        },
-    });
-    const classes = useStyles();
-    return (<>
-        <Paper elevation={1} className={classes.root}>
-            {props.children}
         </Paper>
     </>);
+
 }
