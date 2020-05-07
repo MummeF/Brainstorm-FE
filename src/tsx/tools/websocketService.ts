@@ -11,6 +11,13 @@ export interface IWebSocketService {
     sendMessage(destination: string, body: string): void;
 }
 
+
+const user = 'fe-tech-user'
+const pass = '+vq#3RL!ygE%f&HLM?t_'
+
+
+// const authString = 'Basic ' + new Buffer(user + ':' + pass).toString('base64');
+
 export default class WebsocketService {
     private client: Client;
 
@@ -28,6 +35,10 @@ export default class WebsocketService {
             // debug: function (str: string) {
             //     console.log('WS debug: ', str);
             // },
+            connectHeaders: {
+                login: user,
+                passcode: pass
+            },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000
@@ -69,7 +80,6 @@ export default class WebsocketService {
         this.onConnectCb = onConnectCb;
         this.onDisconnectCb = onDisconnectCb;
         this.onErrorCb = onErrorCb;
-
         this.client.activate();
     }
 
