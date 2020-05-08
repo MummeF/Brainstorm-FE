@@ -6,6 +6,7 @@ import RoomModel from "../model/roomModel";
 import { VAL_ROOM_ID, WS_SEND, WS_SUB } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
+import WebSocketResponse from "../model/websocket/webSocketResponse";
 
 interface Props {
     id: number;
@@ -33,17 +34,29 @@ class RoomRaw extends React.Component<Props, State> {
                         WS_SUB,
                         message => {
                             if (message.body) {
-                                if (!message.body.includes('Success') && !message.body.includes('found')) {
-                                    if (message.body.includes('deleted')) {
-                                        this.setState({ deleted: true });
-                                    } else {
-                                        try {
-                                            const room = JSON.parse(message.body);
+                                try {
+                                    const response: WebSocketResponse = JSON.parse(message.body);
+                                    switch (response.type) {
+                                        case 'success': {
+                                            console.log("received success from websocket: ", response.content)
+                                        }
+                                            break;
+                                        case 'delete': {
+                                            console.log("received delete from websocket: ", response.content)
+                                        }
+                                            break;
+                                        case 'data': {
+                                            console.log("received data from websocket: ", response.content)
+                                            const room: RoomModel = JSON.parse(response.content);
                                             this.setState({ room: room })
-                                        } catch{
-                                            console.log("Parsing error");
+                                        }
+                                            break;
+                                        case 'error': {
+                                            console.log("received error from websocket: ", response.content)
                                         }
                                     }
+                                } catch{
+                                    console.error("Unable to parse body " + message.body)
                                 }
                             }
                         }

@@ -35,9 +35,6 @@ export default class WebsocketService {
             debug: function (str: string) {
                 console.log('WS debug: ', str);
             },
-            connectHeaders: {
-                'Authorization': authString
-            },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000
