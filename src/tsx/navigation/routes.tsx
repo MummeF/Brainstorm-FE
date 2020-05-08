@@ -1,11 +1,12 @@
 import React from "react";
 import Home from "../views/home";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Kontakt from "../views/kontakt";
 import Login from "../views/login";
 import CreateRoom from "../views/createRoom";
 import Room from "../views/room";
 import RoomClose from "../views/roomClose";
+import Page404 from "../views/404";
 
 interface InternalRoute {
     path: string;
@@ -53,6 +54,15 @@ const routes: InternalRoute[] = [
         component: Room,
         exact: true
     },
+
+
+    //always leave 404 page at the end of the list
+    {
+        path: "",
+        name: "Page not found",
+        component: Page404,
+        exact: false
+    },
 ]
 
 function nameForPath(path: string) {
@@ -80,6 +90,8 @@ export default function Routes() {
 
 
     return <>
-        {displayedRoutes}
+        <Switch>
+            {displayedRoutes}
+        </Switch>
     </>
 }

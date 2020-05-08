@@ -38,7 +38,7 @@ class RoomRaw extends React.Component<Props, State> {
                             if (message.body) {
                                 try {
                                     const response: WebSocketResponse = JSON.parse(message.body);
-                                    console.log("received " + response.type + " from websocket: ", response.content)
+                                    // console.log("received " + response.type + " from websocket: ", response.content)
                                     switch (response.type) {
                                         case 'delete':
                                             this.setState({ deleted: true })
