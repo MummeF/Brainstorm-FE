@@ -19,6 +19,6 @@ export const GET_CTRBT = API_PREFIX + "/getContribution" // ?roomId: long & cont
 
 
 //Websocket
-export const WEBSOCKET_URL = "ws://" + BACKEND_DOMAIN + "/websocket"
+export const WEBSOCKET_URL = (BACKEND_LOCAL ? "ws" : "wss") + "://" + BACKEND_DOMAIN + "/websocket"
 export const WS_SUB = "/user/topic/room"
 export const WS_SEND = "/app/subscribe" 
