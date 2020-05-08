@@ -3,7 +3,7 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
 import RoomModel from "../model/roomModel";
-import { VAL_ROOM_ID, WS_SEND, WS_SUB } from "../tools/connections";
+import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
 import WebSocketResponse from "../model/websocket/webSocketResponse";
@@ -13,19 +13,21 @@ interface Props {
 }
 interface State {
     room?: RoomModel;
-    updating: boolean;
+    roomSet: boolean;
     deleted: boolean;
 }
 class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            updating: false,
+            roomSet: false,
             deleted: false
         }
     }
     private webSocketService?: WebsocketService;
     componentDidMount() {
+        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+            .then(res => this.setState({ room: res, roomSet: true }));
         this.webSocketService = WebsocketService.getInstance();
         this.webSocketService.connect(
             () => {
@@ -38,14 +40,13 @@ class RoomRaw extends React.Component<Props, State> {
                                     const response: WebSocketResponse = JSON.parse(message.body);
                                     console.log("received " + response.type + " from websocket: ", response.content)
                                     switch (response.type) {
-                                        case 'delete': {
-                                            this.setState({deleted: true})
-                                        }
+                                        case 'delete':
+                                            this.setState({ deleted: true })
                                             break;
-                                        case 'data': {
+                                        case 'data':
                                             const room: RoomModel = JSON.parse(response.content);
                                             this.setState({ room: room })
-                                        }
+                                            break;
                                     }
                                 } catch{
                                     console.error("Unable to parse body " + message.body)
@@ -75,14 +76,14 @@ class RoomRaw extends React.Component<Props, State> {
     render() {
         if (this.state.deleted) {
             return <>
-                <Redirect to="/"></Redirect>
+                <Redirect to="/roomClosed"></Redirect>
             </>
         }
 
         if (this.state.room) {
-            return (<>
-                <RoomPaper room={this.state.room!}></RoomPaper>
-            </>);
+                return (<>
+                    <RoomPaper room={this.state.room!}></RoomPaper>
+                </>);
         } else {
             return <CustomLoader></CustomLoader>
         }

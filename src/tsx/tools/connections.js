@@ -1,10 +1,12 @@
-export const BACKEND_LOCAL = false
+export const BACKEND_LOCAL = true
 
 export const BACKEND_DOMAIN = BACKEND_LOCAL ? "localhost:8080" : "brainstorm-dhbw-backend.herokuapp.com"
 export const BACKEND_URL = (BACKEND_LOCAL ? "http://" : "https://") + BACKEND_DOMAIN
 export const CORS_ANYWHERE = "https://fierce-beach-68272.herokuapp.com/"
 
 export const API_PREFIX = "/api"
+
+
 //Endpoints
 export const RND_ROOM_ID = API_PREFIX + "/rndRoomId" //returns long
 export const IS_ALIVE = API_PREFIX + "/isAlive" //returns string => res.ok ? online : offline

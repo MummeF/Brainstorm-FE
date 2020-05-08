@@ -12,12 +12,6 @@ export interface IWebSocketService {
 }
 
 
-const user = 'fe-tech-user'
-const pass = '+vq#3RL!ygE%f&HLM?t_'
-
-
-const authString = 'Basic ' + new Buffer(user + ':' + pass).toString('base64');
-
 export default class WebsocketService {
     private client: Client;
 
