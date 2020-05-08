@@ -36,23 +36,15 @@ class RoomRaw extends React.Component<Props, State> {
                             if (message.body) {
                                 try {
                                     const response: WebSocketResponse = JSON.parse(message.body);
+                                    console.log("received " + response.type + " from websocket: ", response.content)
                                     switch (response.type) {
-                                        case 'success': {
-                                            console.log("received success from websocket: ", response.content)
-                                        }
-                                            break;
                                         case 'delete': {
-                                            console.log("received delete from websocket: ", response.content)
+                                            this.setState({deleted: true})
                                         }
                                             break;
                                         case 'data': {
-                                            console.log("received data from websocket: ", response.content)
                                             const room: RoomModel = JSON.parse(response.content);
                                             this.setState({ room: room })
-                                        }
-                                            break;
-                                        case 'error': {
-                                            console.log("received error from websocket: ", response.content)
                                         }
                                     }
                                 } catch{

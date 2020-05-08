@@ -32,9 +32,9 @@ export default class WebsocketService {
     private constructor() {
         this.client = new Client({
             brokerURL: WEBSOCKET_URL,
-            debug: function (str: string) {
-                console.log('WS debug: ', str);
-            },
+            // debug: function (str: string) {
+            //     console.log('WS debug: ', str);
+            // },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000

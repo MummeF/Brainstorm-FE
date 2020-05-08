@@ -53,7 +53,7 @@ export default function RoomPaper(props: Props) {
 
     const contributions: JSX.Element[] = []
     room.contributions?.forEach(cont => {
-        contributions.push(<Grid item key={cont.id} className={classes.contribution} xs={isMobile ? 12 : 6}>
+        contributions.push(<Grid item key={cont.id} className={classes.contribution} xs={isMobile.current ? 12 : 6}>
             <Contribution roomId={room.id} contribution={cont}></Contribution>
         </Grid>)
     })
