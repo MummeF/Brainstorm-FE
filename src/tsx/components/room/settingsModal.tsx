@@ -5,6 +5,7 @@ import { updateRoom, deleteAndGetJsonFromBackend } from "../../tools/fetching";
 import { StyledModal } from "../common/styledModal";
 import DeleteIcon from '@material-ui/icons/Delete';
 import { REM_ROOM } from "../../tools/connections";
+import YesNoOption from "../common/yesNoOption";
 
 interface Props {
     open: boolean;
@@ -16,6 +17,7 @@ interface Props {
 export default function SettingsModal(props: Props) {
     const [updated, setUpdated] = useState(false);
     const [state, setState] = useState(props.room);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     const theme = useTheme();
 
@@ -30,6 +32,11 @@ export default function SettingsModal(props: Props) {
     });
     const classes = useStyles();
 
+    const onNoOption = () => {
+        setDeleteOpen(false);
+    }
+
+
     if (props.open) {
         if (!updated) {
             setState(props.room);
@@ -39,8 +46,9 @@ export default function SettingsModal(props: Props) {
         setUpdated(false);
     }
     const deleteRoom = () => {
-        deleteAndGetJsonFromBackend(REM_ROOM + '?roomId=' + props.room.id)
+        deleteAndGetJsonFromBackend(REM_ROOM + '?roomId=' + props.room.id) 
         // handle response
+        setDeleteOpen(false);
     }
 
 
@@ -52,7 +60,7 @@ export default function SettingsModal(props: Props) {
                 state.topic = event.target.value;
                 setState({ id: props.room.id, topic: event.target.value, contributions: props.room.contributions })
             }} /></Grid>
-            <Grid item> <Button variant="text" onClick={deleteRoom} className={classes.deleteBtn} startIcon={<DeleteIcon />}>Close Room</Button></Grid>
+            <Grid item> <Button variant="text" onClick={() => setDeleteOpen(true)} className={classes.deleteBtn} startIcon={<DeleteIcon />}>Close Room</Button></Grid>
         </Grid>
 
 
@@ -65,6 +73,14 @@ export default function SettingsModal(props: Props) {
                 updateRoom(state);
                 props.handleClose();
             }} title="Settings"></StyledModal>
+            <YesNoOption
+                open={deleteOpen}
+                question="Sind sie sicher?"
+                title="Raum löschen?"
+                severity="error"
+                onYesOption={deleteRoom}
+                onNoOption={onNoOption}
+            ></YesNoOption>
         </>);
 
 }

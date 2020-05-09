@@ -49,7 +49,6 @@ export default function Home() {
                     </Grid>
                 </Grid>
             </Paper>
-            {/* <YesNoOption open={true} question="Sind sie sich sicher?" title="Raum löschen" onYesOption={()=>{}} onNoOption={()=>{}} onAbortOption={()=>{}} ></YesNoOption> */}
         </div>
 
     </>

@@ -15,7 +15,7 @@ interface Props {
 
 
 export default function RoomPaper(props: Props) {
-    const [settingsOpen, setSettingsOpen] = useState(props.room.topic === "");
+    const [settingsOpen, setSettingsOpen] = useState(false);
     const [contributionOpen, setContributionOpen] = useState(false);
 
     // const theme = useTheme();

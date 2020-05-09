@@ -15,23 +15,27 @@ const styles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             position: "fixed",
-            width: "100%",
-            top: 0,
-            left: 0,
+            width: "60%",
+            top: "5em",
+            right: 0,
             zIndex: 9999,
         }
     })
 );
 
 const GlobalHint: React.FunctionComponent<IGlobalHintProps> = (props: IGlobalHintProps) => {
+
     const classes = styles();
     if (props.timeout && props.onClose) {
-        setTimeout(() => props.onClose!(), props.timeout)
+        setTimeout(props.onClose, props.timeout)
     }
     return (
         <>
             <div className={classes.root}>
-                <Alert onClose={props.onClose} severity={props.severity}>{props.children}</Alert>
+                {
+                    props.timeout ? <Alert severity={props.severity}>{props.children}</Alert>
+                        : <Alert onClose={props.onClose} severity={props.severity}>{props.children}</Alert>
+                }
             </div>
         </>
     );
