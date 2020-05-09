@@ -81,9 +81,9 @@ class RoomRaw extends React.Component<Props, State> {
         }
 
         if (this.state.room) {
-                return (<>
+                return <>
                     <RoomPaper room={this.state.room!}></RoomPaper>
-                </>);
+                </>
         } else {
             return <CustomLoader></CustomLoader>
         }

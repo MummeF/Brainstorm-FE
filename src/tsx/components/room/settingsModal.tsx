@@ -46,7 +46,7 @@ export default function SettingsModal(props: Props) {
         setUpdated(false);
     }
     const deleteRoom = () => {
-        deleteAndGetJsonFromBackend(REM_ROOM + '?roomId=' + props.room.id) 
+        deleteAndGetJsonFromBackend(REM_ROOM + '?roomId=' + props.room.id)
         // handle response
         setDeleteOpen(false);
     }

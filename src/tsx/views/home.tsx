@@ -3,7 +3,6 @@ import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
 import React, { useRef } from "react";
 import { NavLink } from "react-router-dom";
-import YesNoOption from "../components/common/yesNoOption"
 
 
 export default function Home() {

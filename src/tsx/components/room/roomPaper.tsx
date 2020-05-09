@@ -66,11 +66,9 @@ export default function RoomPaper(props: Props) {
         }
     }
 
-    return (<>
-
+    return <>
         <SettingsModal open={settingsOpen} room={props.room} handleClose={handleSettingsClose}></SettingsModal>
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
-
         <Grid container justify="space-between" direction="row">
             <Grid item xs={10}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>
             <Grid item xs={2}><SettingsButton></SettingsButton></Grid>
@@ -93,6 +91,6 @@ export default function RoomPaper(props: Props) {
                 </>}
             </Grid>
         </Paper>
-    </>);
+    </>
 
 }

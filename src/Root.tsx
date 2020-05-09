@@ -1,14 +1,12 @@
+import { makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import Footer from "./tsx/components/common/footer";
-import {
-    BrowserRouter,
-    Switch,
-} from "react-router-dom";
-import Routes from "./tsx/navigation/routes";
-import {  makeStyles, Typography } from "@material-ui/core";
-import Header from "./tsx/components/common/header";
-import { backendOnline } from "./tsx/tools/fetching";
+import { BrowserRouter, Switch } from "react-router-dom";
 import CustomLoader from "./tsx/components/common/customLoader";
+import Footer from "./tsx/components/common/footer";
+import GlobalHint from "./tsx/components/common/globalHint";
+import Header from "./tsx/components/common/header";
+import Routes from "./tsx/navigation/routes";
+import { backendOnline } from "./tsx/tools/fetching";
 
 export default function Root() {
     // const theme = useTheme();
@@ -32,22 +30,20 @@ export default function Root() {
     if (loading) {
         return <CustomLoader></CustomLoader>
     } else {
-        if (!online) {
-            return <Typography variant="h2">Ein Fehler ist aufgetreten!</Typography>
-        } else {
-            return <>
-                <BrowserRouter>
-                    <Header></Header>
-                    <br />
-                    <div className={classes.root}>
-                        <Switch>
-                            <Routes></Routes>
-                        </Switch>
-                    </div>
-                    <Footer></Footer>
-                </BrowserRouter>
-            </>
-        }
+        return <>
+            <BrowserRouter>
+                <Header></Header>
+                <br />
+                <div className={classes.root}>
+                    <Switch>
+                        <Routes></Routes>
+                    </Switch>
+                </div>
+                <Footer></Footer>
+            </BrowserRouter>
+            {online ? <></> : <GlobalHint severity="error">Leider ist ein Problem mit dem Backend aufgetreten. Bitte versuchen Sie es später erneut.</GlobalHint>}
+        </>
+
     }
 
 }

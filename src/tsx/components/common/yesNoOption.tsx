@@ -1,4 +1,4 @@
-import { createStyles, Dialog, DialogTitle, Grid, Theme, Typography, Button, useTheme } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, Grid, Typography, useTheme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 
@@ -92,7 +92,7 @@ const YesNoOption: React.FunctionComponent<IYesNoOptionProps> = (props: IYesNoOp
                         <Grid item xs><Button onClick={props.onNoOption} className={classes.noBtn} variant="outlined">No</Button></Grid>
                     </Grid>
                 </Grid>
-            </Dialog>);
+            </Dialog>
         </>
     );
 }

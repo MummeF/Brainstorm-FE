@@ -16,6 +16,7 @@ const styles = makeStyles((theme: Theme) =>
         root: {
             position: "fixed",
             width: "60%",
+            maxWidth: "30em",
             top: "5em",
             right: 0,
             zIndex: 9999,
