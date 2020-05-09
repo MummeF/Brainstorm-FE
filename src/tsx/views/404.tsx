@@ -1,6 +1,5 @@
+import { Typography } from '@material-ui/core';
 import * as React from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { Theme, Typography, createStyles } from '@material-ui/core';
 
 export interface I404Props {
 

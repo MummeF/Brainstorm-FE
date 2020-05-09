@@ -3,6 +3,7 @@ import AddIcon from '@material-ui/icons/Add';
 import GroupIcon from '@material-ui/icons/Group';
 import React, { useRef } from "react";
 import { NavLink } from "react-router-dom";
+import YesNoOption from "../components/common/yesNoOption"
 
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
                     </Grid>
                 </Grid>
             </Paper>
+            {/* <YesNoOption open={true} question="Sind sie sich sicher?" title="Raum löschen" onYesOption={()=>{}} onNoOption={()=>{}} onAbortOption={()=>{}} ></YesNoOption> */}
         </div>
 
     </>
