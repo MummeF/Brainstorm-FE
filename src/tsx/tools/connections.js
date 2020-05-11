@@ -1,4 +1,4 @@
-export const BACKEND_LOCAL = true
+export const BACKEND_LOCAL = false
 
 export const BACKEND_DOMAIN = BACKEND_LOCAL ? "localhost:8080" : "brainstorm-dhbw-backend.herokuapp.com"
 export const BACKEND_URL = (BACKEND_LOCAL ? "http://" : "https://") + BACKEND_DOMAIN
@@ -8,7 +8,7 @@ export const API_PREFIX = "/api"
 
 
 //Endpoints
-export const RND_ROOM_ID = API_PREFIX + "/rndRoomId" //returns long
+export const CRT_ROOM = API_PREFIX + "/createRoom" //? topic?: string --- returns long
 export const IS_ALIVE = API_PREFIX + "/isAlive" //returns string => res.ok ? online : offline
 export const VAL_ROOM_ID = API_PREFIX + "/validateRoomId" //? roomId : long --- returns boolean
 export const GET_ROOM = API_PREFIX + "/getRoom" //? roomId : long --- returns RoomModel

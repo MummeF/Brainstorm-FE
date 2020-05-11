@@ -1,13 +1,16 @@
-import { Button, Fab, Grid, makeStyles, Paper, Typography, IconButton } from "@material-ui/core";
+import { Button, Fab, Grid, IconButton, makeStyles, Paper, Typography, TextField, setRef } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import SettingsIcon from '@material-ui/icons/Settings';
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import CopyToClipboard from 'react-copy-to-clipboard';
 import RoomModel from "../../model/roomModel";
 import StyledMessage from "../common/styledMessage";
 import Contribution from "./contribution";
 import ContributionModal from "./contributionModal";
 import SettingsModal from "./settingsModal";
-
+import CheckIcon from '@material-ui/icons/Check';
+import ShareIcon from '@material-ui/icons/Share';
 
 interface Props {
     room: RoomModel
@@ -17,6 +20,9 @@ interface Props {
 export default function RoomPaper(props: Props) {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [contributionOpen, setContributionOpen] = useState(false);
+
+    const [share, setShare] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     // const theme = useTheme();
 
@@ -30,6 +36,14 @@ export default function RoomPaper(props: Props) {
         contribution: {
             width: "100%",
         },
+        share: {
+            paddingRight: "1em",
+            textAlign: "right",
+            width: "100%",
+        },
+        linkInput: {
+            direction: "rtl",
+        }
     });
     const classes = useStyles();
 
@@ -47,6 +61,9 @@ export default function RoomPaper(props: Props) {
     }
 
     const isMobile = useRef(window.innerWidth < 480);
+    useEffect(() => {
+        setRef(isMobile, window.innerWidth < 480)
+    })
 
 
     const room = props.room;
@@ -66,12 +83,46 @@ export default function RoomPaper(props: Props) {
         }
     }
 
+    const ShareButton = () => {
+        if (isMobile.current) {
+            return <IconButton aria-label="shareIcon" onClick={() => setShare(true)}><ShareIcon /></IconButton>
+        } else {
+            return <Button startIcon={<ShareIcon />} variant="text" color="secondary" onClick={() => setShare(true)}>Share Link</Button>
+        }
+    }
+
+    const CopyButton = () => {
+        if (copied) {
+            return <Button startIcon={<CheckIcon />} variant="text" color="secondary">Copied</Button>;
+        } else {
+            return <CopyToClipboard text={window.location.href} onCopy={() => {
+                setCopied(true);
+                setTimeout(() => {
+                    setCopied(false);
+                    setShare(false);
+                }, 2000);
+            }}>
+                <Button variant="text" color="secondary" startIcon={<FileCopyIcon />}>Copy Link</Button>
+            </CopyToClipboard>
+        }
+    }
+
+    const CopyField = () => {
+        return <>
+            {isMobile.current ? <></> : <TextField className={classes.linkInput} size="small" variant="outlined" disabled value={window.location.href}></TextField>}
+            <CopyButton />
+        </>
+    }
+
     return <>
         <SettingsModal open={settingsOpen} room={props.room} handleClose={handleSettingsClose}></SettingsModal>
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
         <Grid container justify="space-between" direction="row">
-            <Grid item xs={10}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>
-            <Grid item xs={2}><SettingsButton></SettingsButton></Grid>
+            <Grid item xs={6}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>
+            <Grid className={classes.share} item xs={4}>
+                {share ? <CopyField /> : <ShareButton />}
+            </Grid>
+            <Grid item xs={2}><SettingsButton /></Grid>
         </Grid>
         <Paper elevation={1} className={classes.root}>
             <Grid container direction="row" justify="flex-end">

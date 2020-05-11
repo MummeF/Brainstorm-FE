@@ -41,10 +41,10 @@ export default function Home() {
             <Paper elevation={1} className={classes.btnPaper}>
                 <Grid container spacing={3}>
                     <Grid item xs={isMobile.current ? 12 : 6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/login">Raum beitreten</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<AddIcon />} component={NavLink} to="/createRoom">Raum erstellen</Button>
                     </Grid>
                     <Grid item xs={isMobile.current ? 12 : 6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<AddIcon />} component={NavLink} to="/createRoom">Raum erstellen</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/login">Raum beitreten</Button>
                     </Grid>
                 </Grid>
             </Paper>
