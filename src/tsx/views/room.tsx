@@ -26,51 +26,54 @@ class RoomRaw extends React.Component<Props, State> {
     }
     private webSocketService?: WebsocketService;
     componentDidMount() {
-        window.addEventListener('beforeunload', (event) => {
-            // Cancel the event as stated by the standard.
-            event.preventDefault();
-            // Chrome requires returnValue to be set.
-            event.returnValue = '';
+        const connect = () => {
+            this.webSocketService?.connect(
+                () => {
+                    this.webSocketService &&
+                        this.webSocketService.subscribe(
+                            WS_SUB,
+                            message => {
+                                if (message.body) {
+                                    try {
+                                        const response: WebSocketResponse = JSON.parse(message.body);
+                                        // console.log("received " + response.type + " from websocket: ", response.content)
+                                        switch (response.type) {
+                                            case 'delete':
+                                                this.setState({ deleted: true })
+                                                break;
+                                            case 'data':
+                                                const room: MRoom = JSON.parse(response.content);
+                                                this.setState({ room: room })
+                                                break;
+                                        }
+                                    } catch{
+                                        console.error("Unable to parse body " + message.body)
+                                    }
+                                }
+                            }
+                        );
+                    this.subscribe(this.props.id);
+                },
+                () => { },
+                () => {
+                    this.webSocketService?.sendMessage(WS_UNSUB,
+                        JSON.stringify({ roomId: this.props.id }))
+                },
+                () => { }
+            );
+        }
+
+        window.onbeforeunload = () => {
             this.webSocketService?.disconnect();
-        });
+            setTimeout(() => connect(), 2000); // Just in case that the confirm window appears and the user clicks 'cancel'
+            return null;
+        }
+
 
         getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
             .then(res => this.setState({ room: res, roomSet: true }));
         this.webSocketService = WebsocketService.getInstance();
-        this.webSocketService.connect(
-            () => {
-                this.webSocketService &&
-                    this.webSocketService.subscribe(
-                        WS_SUB,
-                        message => {
-                            if (message.body) {
-                                try {
-                                    const response: WebSocketResponse = JSON.parse(message.body);
-                                    // console.log("received " + response.type + " from websocket: ", response.content)
-                                    switch (response.type) {
-                                        case 'delete':
-                                            this.setState({ deleted: true })
-                                            break;
-                                        case 'data':
-                                            const room: MRoom = JSON.parse(response.content);
-                                            this.setState({ room: room })
-                                            break;
-                                    }
-                                } catch{
-                                    console.error("Unable to parse body " + message.body)
-                                }
-                            }
-                        }
-                    );
-                this.subscribe(this.props.id);
-            },
-            () => { },
-            () => {
-                this.webSocketService?.sendMessage(WS_UNSUB,
-                    JSON.stringify({ roomId: this.props.id }))
-            },
-            () => { }
-        );
+        connect();
     }
 
     componentWillUnmount() {
