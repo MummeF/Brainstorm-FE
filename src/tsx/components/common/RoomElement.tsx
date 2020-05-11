@@ -1,11 +1,10 @@
 import { Card, CardContent, createStyles, Grid, IconButton, Theme, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
-import MRoom from '../../model/roomModel';
 import { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import MRoom from '../../model/roomModel';
 
 export interface IRoomElementProps {
     room: MRoom;

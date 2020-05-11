@@ -1,13 +1,12 @@
+import { Grid, setRef } from '@material-ui/core';
 import * as React from 'react';
-import { makeStyles } from '@material-ui/styles';
-import { Theme, createStyles, Grid, setRef } from '@material-ui/core';
-import { useState, Dispatch } from 'react';
+import { Dispatch, useState } from 'react';
 import MRoom from '../../model/roomModel';
-import StyledMessage from './styledMessage';
+import { GET_ROOM_LST } from '../../tools/connections';
+import { getJsonFromBackend } from '../../tools/fetching';
 import CustomLoader from './customLoader';
 import RoomElement from './RoomElement';
-import { getJsonFromBackend } from '../../tools/fetching';
-import { GET_ROOM_LST } from '../../tools/connections';
+import StyledMessage from './styledMessage';
 
 
 export interface IRoomListProps {
