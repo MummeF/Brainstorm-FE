@@ -3,7 +3,7 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
 import MRoom from "../model/roomModel";
-import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM } from "../tools/connections";
+import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM, WS_UNSUB } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
 import WebSocketResponse from "../model/websocket/webSocketResponse";
@@ -26,6 +26,14 @@ class RoomRaw extends React.Component<Props, State> {
     }
     private webSocketService?: WebsocketService;
     componentDidMount() {
+        window.addEventListener('beforeunload', (event) => {
+            // Cancel the event as stated by the standard.
+            event.preventDefault();
+            // Chrome requires returnValue to be set.
+            event.returnValue = '';
+            this.webSocketService?.disconnect();
+        });
+
         getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
             .then(res => this.setState({ room: res, roomSet: true }));
         this.webSocketService = WebsocketService.getInstance();
@@ -57,6 +65,10 @@ class RoomRaw extends React.Component<Props, State> {
                 this.subscribe(this.props.id);
             },
             () => { },
+            () => {
+                this.webSocketService?.sendMessage(WS_UNSUB,
+                    JSON.stringify({ roomId: this.props.id }))
+            },
             () => { }
         );
     }

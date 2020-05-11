@@ -17,6 +17,7 @@ export default class WebsocketService {
 
     private onConnectCb?: Function;
     private onDisconnectCb?: Function;
+    private beforeDisconnectCb?: Function;
     private onErrorCb?: Function;
     private _isConnected = false;
 
@@ -65,15 +66,20 @@ export default class WebsocketService {
     connect(
         onConnectCb: Function,
         onDisconnectCb: Function,
+        beforeDisconnectCb: Function,
         onErrorCb: Function
     ): void {
         this.onConnectCb = onConnectCb;
         this.onDisconnectCb = onDisconnectCb;
+        this.beforeDisconnectCb = beforeDisconnectCb;
         this.onErrorCb = onErrorCb;
         this.client.activate();
     }
 
-    disconnect(): void {
+    async disconnect(): Promise<void> {
+        if(this.beforeDisconnectCb){
+            await this.beforeDisconnectCb();
+        }
         this.client.deactivate();
     }
 

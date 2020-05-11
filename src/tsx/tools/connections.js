@@ -1,4 +1,4 @@
-export const BACKEND_LOCAL = false
+export const BACKEND_LOCAL = true
 
 export const BACKEND_DOMAIN = BACKEND_LOCAL ? "localhost:8080" : "brainstorm-dhbw-backend.herokuapp.com"
 export const BACKEND_URL = (BACKEND_LOCAL ? "http" : "https") + "://" + BACKEND_DOMAIN
@@ -25,3 +25,4 @@ export const GET_ROOM_LST = API_PREFIX + "/getRoomList" //  returns Room[]
 export const WEBSOCKET_URL = (BACKEND_LOCAL ? "ws" : "wss") + "://" + BACKEND_DOMAIN + "/websocket"
 export const WS_SUB = "/user/topic/room"
 export const WS_SEND = "/app/subscribe" 
+export const WS_UNSUB = "/app/unsubscribe" 

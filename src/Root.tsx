@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, setRef } from "@material-ui/core";
 import React, { useState } from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
 import CustomLoader from "./tsx/components/common/customLoader";
@@ -10,13 +10,15 @@ import { backendOnline } from "./tsx/tools/fetching";
 
 export default function Root() {
     // const theme = useTheme();
-
+    const isMobile = React.useRef(window.innerWidth < 480);
+    React.useEffect(() => {
+        setRef(isMobile, window.innerWidth < 480) 
+    });
     const useStyles = makeStyles({
         root: {
             margin: "auto",
-            width: "90%",
+            width: isMobile.current? "90%": "75%",
         },
-
     });
 
     const classes = useStyles();
