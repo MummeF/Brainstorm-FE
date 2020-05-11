@@ -1,6 +1,6 @@
 import { BACKEND_URL, CORS_ANYWHERE, BACKEND_LOCAL, IS_ALIVE, UPDT_ROOM, ADD_CTRBT } from "./connections"
-import RoomModel from "../model/roomModel";
-import ContributionModel from "../model/contributionModel";
+import MRoom from "../model/roomModel";
+import MContribution from "../model/contributionModel";
 
 const user = 'fe-tech-user'
 const pass = '+vq#3RL!ygE%f&HLM?t_'
@@ -56,7 +56,7 @@ export function postDataToBackend(path: string, data: any): Promise<any> {
 
 export async function addContribution(roomId: number, contributionText: string) {
     let added: boolean = false;
-    let contribution: ContributionModel = {
+    let contribution: MContribution = {
         content: contributionText,
         id: -1
     }
@@ -72,7 +72,7 @@ export async function addContribution(roomId: number, contributionText: string) 
     return added;
 }
 
-export async function updateRoom(room: RoomModel): Promise<boolean> {
+export async function updateRoom(room: MRoom): Promise<boolean> {
     let updated: boolean = false;
     await postDataToBackend(UPDT_ROOM, room)
         .then(res => {

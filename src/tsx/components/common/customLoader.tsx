@@ -2,7 +2,11 @@ import React from "react";
 import Loader from 'react-loader-spinner'
 import { useTheme, makeStyles, Grid } from "@material-ui/core";
 
-export default function CustomLoader() {
+interface Props {
+    inline?: boolean;
+}
+
+export default function CustomLoader(props: Props) {
     const theme = useTheme();
     const useStyles = makeStyles({
         root: {
@@ -17,6 +21,11 @@ export default function CustomLoader() {
         },
     });
     const classes = useStyles();
+    if (props.inline) {
+        return <Grid container item direction="row" justify="center">
+            <Loader height={60} width={60} type="Oval" color={theme.palette.secondary.light}></Loader>
+        </Grid>
+    }
     return (<>
         <Grid container alignItems="center" justify="center" className={classes.root}>
             <Grid item >

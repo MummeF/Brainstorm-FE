@@ -5,6 +5,7 @@ import Alert, { Color } from '@material-ui/lab/Alert';
 
 
 export interface IGlobalHintProps {
+    open: boolean;
     severity: Color;
     onClose?(): void;
     timeout?: number;
@@ -29,6 +30,9 @@ const GlobalHint: React.FunctionComponent<IGlobalHintProps> = (props: IGlobalHin
     const classes = styles();
     if (props.timeout && props.onClose) {
         setTimeout(props.onClose, props.timeout)
+    }
+    if (!props.open) {
+        return null;
     }
     return (
         <>

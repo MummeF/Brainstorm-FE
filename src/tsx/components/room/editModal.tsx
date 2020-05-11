@@ -4,13 +4,13 @@ import SendIcon from '@material-ui/icons/Send';
 import { putAndGetJsonFromBackend } from "../../tools/fetching";
 import { UPDT_CTRBT } from "../../tools/connections";
 import CustomLoader from "../common/customLoader";
-import ContributionModel from "../../model/contributionModel";
+import MContribution from "../../model/contributionModel";
 
 interface Props {
     open: boolean;
     handleClose(): void;
     roomId: number;
-    contribution: ContributionModel;
+    contribution: MContribution;
 }
 
 export default function EditModal(props: Props) {
@@ -76,15 +76,5 @@ export default function EditModal(props: Props) {
     } else {
         return null;
     }
-    // const body = (<>
-    // <Grid>
-
-    // </Grid>
-    //     <TextField className={}></TextField>
-    // </>)
-
-    // return <>
-    //     <StyledModal title="Neuer Beitrag" body={body} open={props.open} handleClose={props.handleCLose}></StyledModal>
-    // </>
 
 }

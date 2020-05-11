@@ -1,7 +1,7 @@
-export const BACKEND_LOCAL = false
+export const BACKEND_LOCAL = true
 
 export const BACKEND_DOMAIN = BACKEND_LOCAL ? "localhost:8080" : "brainstorm-dhbw-backend.herokuapp.com"
-export const BACKEND_URL = (BACKEND_LOCAL ? "http://" : "https://") + BACKEND_DOMAIN
+export const BACKEND_URL = (BACKEND_LOCAL ? "http" : "https") + "://" + BACKEND_DOMAIN
 export const CORS_ANYWHERE = "https://fierce-beach-68272.herokuapp.com/"
 
 export const API_PREFIX = "/api"
@@ -18,6 +18,7 @@ export const REM_CTRBT = API_PREFIX + "/deleteContribution" // ?roomId: long & c
 export const REM_ROOM = API_PREFIX + "/deleteRoom" // ?roomId: long --- returns string => res.ok ? success : denied
 export const UPDT_CTRBT = API_PREFIX + "/updateContribution" // ?roomId: long & contributionId: long & content: string --- returns string => res.ok ? success : denied
 export const GET_CTRBT = API_PREFIX + "/getContribution" // ?roomId: long & contributionId: long  --- returns Contribution
+export const GET_ROOM_LST = API_PREFIX + "/getRoomList" //  returns Room[]
 
 
 //Websocket

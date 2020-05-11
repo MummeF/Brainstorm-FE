@@ -44,7 +44,7 @@ export default function Home() {
                         <Button color="primary" className={classes.button} variant="text" startIcon={<AddIcon />} component={NavLink} to="/createRoom">Raum erstellen</Button>
                     </Grid>
                     <Grid item xs={isMobile.current ? 12 : 6}>
-                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/login">Raum beitreten</Button>
+                        <Button color="primary" className={classes.button} variant="text" startIcon={<GroupIcon />} component={NavLink} to="/enterRoom">Raum beitreten</Button>
                     </Grid>
                 </Grid>
             </Paper>

@@ -2,7 +2,7 @@ import React from "react";
 import Home from "../views/home";
 import { Route, Switch } from "react-router-dom";
 import Kontakt from "../views/kontakt";
-import Login from "../views/login";
+import EnterRoom from "../views/enterRoom";
 import CreateRoom from "../views/createRoom";
 import Room from "../views/room";
 import RoomClose from "../views/roomClose";
@@ -37,9 +37,9 @@ const routes: InternalRoute[] = [
         exact: true
     },
     {
-        path: "/login",
-        name: "Login",
-        child: <Login></Login>,
+        path: "/enterRoom",
+        name: "Raum beitreten",
+        child: <EnterRoom></EnterRoom>,
         exact: true
     },
     {

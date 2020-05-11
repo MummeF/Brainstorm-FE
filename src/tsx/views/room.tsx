@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
-import RoomModel from "../model/roomModel";
+import MRoom from "../model/roomModel";
 import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
@@ -12,7 +12,7 @@ interface Props {
     id: number;
 }
 interface State {
-    room?: RoomModel;
+    room?: MRoom;
     roomSet: boolean;
     deleted: boolean;
 }
@@ -44,7 +44,7 @@ class RoomRaw extends React.Component<Props, State> {
                                             this.setState({ deleted: true })
                                             break;
                                         case 'data':
-                                            const room: RoomModel = JSON.parse(response.content);
+                                            const room: MRoom = JSON.parse(response.content);
                                             this.setState({ room: room })
                                             break;
                                     }
@@ -66,11 +66,10 @@ class RoomRaw extends React.Component<Props, State> {
     }
 
     private subscribe(roomId: number): void {
-        this.webSocketService &&
-            this.webSocketService.sendMessage(
-                WS_SEND,
-                JSON.stringify({ roomId: roomId })
-            );
+        this.webSocketService?.sendMessage(
+            WS_SEND,
+            JSON.stringify({ roomId: roomId })
+        );
     }
 
     render() {
@@ -81,35 +80,15 @@ class RoomRaw extends React.Component<Props, State> {
         }
 
         if (this.state.room) {
-                return <>
-                    <RoomPaper room={this.state.room!}></RoomPaper>
-                </>
+            return <>
+                <RoomPaper room={this.state.room!}></RoomPaper>
+            </>
         } else {
             return <CustomLoader></CustomLoader>
         }
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 type TParams = { id: string }
 
@@ -132,13 +111,13 @@ export default function Room({ match }: RouteComponentProps<TParams>) {
             if (verified === 1) {
                 return <RoomRaw id={+id}></RoomRaw>
             } else {
-                return <Redirect to={{ pathname: '/login' }}></Redirect>
+                return <Redirect to="/enterRoom"></Redirect>
             }
         } else {
             return <CustomLoader></CustomLoader>;
         }
     } else {
-        return <Redirect to={{ pathname: '/login' }}></Redirect>
+        return <Redirect to="/enterRoom"></Redirect>
     }
 
 }

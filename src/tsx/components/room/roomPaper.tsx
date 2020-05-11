@@ -4,7 +4,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import SettingsIcon from '@material-ui/icons/Settings';
 import React, { useRef, useState, useEffect } from "react";
 import CopyToClipboard from 'react-copy-to-clipboard';
-import RoomModel from "../../model/roomModel";
+import MRoom from "../../model/roomModel";
 import StyledMessage from "../common/styledMessage";
 import Contribution from "./contribution";
 import ContributionModal from "./contributionModal";
@@ -13,7 +13,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import ShareIcon from '@material-ui/icons/Share';
 
 interface Props {
-    room: RoomModel
+    room: MRoom
 }
 
 

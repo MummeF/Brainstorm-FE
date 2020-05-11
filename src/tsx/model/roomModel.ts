@@ -1,7 +1,7 @@
-import ContributionModel from "./contributionModel";
+import MContribution from "./contributionModel";
 
-export default interface RoomModel{
+export default interface MRoom{
     id: number;
     topic: string;
-    contributions: ContributionModel[];
+    contributions: MContribution[];
 }

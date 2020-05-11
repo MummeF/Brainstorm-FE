@@ -1,7 +1,7 @@
 import { Button, Grid, makeStyles, TextField, Typography, useTheme } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import React, { useState } from "react";
-import RoomModel from "../../model/roomModel";
+import MRoom from "../../model/roomModel";
 import { REM_ROOM } from "../../tools/connections";
 import { deleteAndGetJsonFromBackend, updateRoom } from "../../tools/fetching";
 import { StyledModal } from "../common/styledModal";
@@ -10,7 +10,7 @@ import YesNoOption from "../common/yesNoOption";
 interface Props {
     open: boolean;
     handleClose(): void;
-    room: RoomModel;
+    room: MRoom;
 }
 
 
@@ -73,7 +73,7 @@ export default function SettingsModal(props: Props) {
             }} title="Settings"></StyledModal>
             <YesNoOption
                 open={deleteOpen}
-                question="Sind sie sicher?"
+                question="Bist Du sicher?"
                 title="Raum löschen?"
                 severity="error"
                 onYesOption={deleteRoom}

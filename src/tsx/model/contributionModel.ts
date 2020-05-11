@@ -1,4 +1,4 @@
-export default interface ContributionModel{
+export default interface MContribution{
     id: number;
     content: string;
 }

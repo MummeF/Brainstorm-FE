@@ -29,7 +29,7 @@ export default class WebsocketService {
             // debug: function (str: string) {
             //     console.log('WS debug: ', str);
             // },
-            reconnectDelay: 5000,
+            reconnectDelay: 1000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000
         });
