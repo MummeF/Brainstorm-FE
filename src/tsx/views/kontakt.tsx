@@ -1,5 +1,5 @@
-import React from "react";
 import { Typography } from "@material-ui/core";
+import React from "react";
 
 
 export default function Kontakt() {
@@ -7,3 +7,4 @@ export default function Kontakt() {
         <Typography variant="h4"> Mail To: felix.mumme@daimler.com</Typography>
     </>
 }
+

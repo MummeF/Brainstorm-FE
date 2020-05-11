@@ -2,9 +2,6 @@ import { Button, Dialog, DialogTitle, Grid, Typography, useTheme } from '@materi
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 
-enum Color {
-    "info", "success", "warning", "error"
-}
 
 export interface IYesNoOptionProps {
     open: boolean;
@@ -41,9 +38,9 @@ const YesNoOption: React.FunctionComponent<IYesNoOptionProps> = (props: IYesNoOp
 
     const useStyles = makeStyles({
         root: {
-            minWidth: "30em",
-            maxWidth: "95%",
-            overflow: "hidden"
+            width: "30em",
+            maxWidth: "100%",
+            overflow: "hidden",
         },
         body: {
             margin: "auto",
@@ -56,7 +53,6 @@ const YesNoOption: React.FunctionComponent<IYesNoOptionProps> = (props: IYesNoOp
         title: {
             color: titleColor.contrastText,
             backgroundColor: titleColor.main,
-            width: "100%",
         },
         yesBtn: {
             width: "100%",
@@ -82,8 +78,8 @@ const YesNoOption: React.FunctionComponent<IYesNoOptionProps> = (props: IYesNoOp
     return (
         <>
             <Dialog onClose={props.onAbortOption ? props.onAbortOption : props.onNoOption} aria-labelledby="simple-dialog-title" open={props.open}>
+                {props.title ? <DialogTitle className={classes.title} >{props.title}</DialogTitle> : <></>}
                 <Grid container direction="column" className={classes.root}>
-                    {props.title ? <Grid item><DialogTitle className={classes.title} >{props.title}</DialogTitle></Grid> : <></>}
                     <Grid item container className={classes.body} direction="row" justify="center" alignItems="center">
                         <Grid item xs><Typography color="inherit" align="center" variant="body1">{props.question}</Typography></Grid>
                     </Grid>

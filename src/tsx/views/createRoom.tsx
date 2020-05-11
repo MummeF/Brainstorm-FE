@@ -1,6 +1,6 @@
 import React from 'react';
-import { Typography,  Button } from "@material-ui/core";
-import  { getJsonFromBackend } from '../tools/fetching';
+import { Typography, Button } from "@material-ui/core";
+import { getJsonFromBackend } from '../tools/fetching';
 import { RND_ROOM_ID } from '../tools/connections';
 import { Redirect } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ interface Props {
 interface State {
   fetched: boolean;
   redirect: boolean;
-  roomId: number | undefined;
+  roomId?: number;
 }
 
 class CreateRoom extends React.Component<Props, State>{
@@ -24,7 +24,6 @@ class CreateRoom extends React.Component<Props, State>{
     super(props);
     this.state = {
       fetched: false,
-      roomId: undefined,
       redirect: false,
     };
   }

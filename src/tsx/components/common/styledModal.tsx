@@ -1,11 +1,7 @@
 import React from "react";
 import { Modal, useTheme, makeStyles, Grid, Paper, AppBar, Toolbar, Button, Typography } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
-interface Props {
-    open: boolean;
-    handleClose(): void;
-    body?: JSX.Element;
-    title?: string;
+interface Props extends RawProps {
     classes: any;
 }
 interface State {

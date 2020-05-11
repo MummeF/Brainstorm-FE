@@ -1,10 +1,10 @@
-import { TextField, Typography, Button, makeStyles, useTheme, Grid } from "@material-ui/core";
+import { Button, Grid, makeStyles, TextField, Typography, useTheme } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 import React, { useState } from "react";
 import RoomModel from "../../model/roomModel";
-import { updateRoom, deleteAndGetJsonFromBackend } from "../../tools/fetching";
-import { StyledModal } from "../common/styledModal";
-import DeleteIcon from '@material-ui/icons/Delete';
 import { REM_ROOM } from "../../tools/connections";
+import { deleteAndGetJsonFromBackend, updateRoom } from "../../tools/fetching";
+import { StyledModal } from "../common/styledModal";
 import YesNoOption from "../common/yesNoOption";
 
 interface Props {
@@ -50,8 +50,6 @@ export default function SettingsModal(props: Props) {
         // handle response
         setDeleteOpen(false);
     }
-
-
     const body = (<>
         <br />
         <Grid container className={classes.root} direction="column" spacing={1}>

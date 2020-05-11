@@ -43,7 +43,6 @@ export default function Root() {
             </BrowserRouter>
             {online ? <></> : <GlobalHint severity="error">Leider ist ein Problem mit dem Backend aufgetreten. Bitte versuchen Sie es später erneut.</GlobalHint>}
         </>
-
     }
 
 }
