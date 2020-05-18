@@ -5,7 +5,7 @@ import { getJsonFromBackend } from "../tools/fetching";
 import { VAL_ROOM_ID } from "../tools/connections";
 import { Redirect } from "react-router-dom";
 import GlobalHint from "../components/common/globalHint";
-import RoomList from "../components/common/RoomList";
+import RoomList from "../components/room/RoomList";
 
 interface Props {
 

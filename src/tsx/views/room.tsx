@@ -3,77 +3,83 @@ import { Redirect, RouteComponentProps } from "react-router-dom";
 import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
 import MRoom from "../model/roomModel";
-import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM, WS_UNSUB } from "../tools/connections";
-import { getJsonFromBackend } from "../tools/fetching";
+import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM, WS_UNSUB, VLD_PWD, HAS_PWD } from "../tools/connections";
+import { getJsonFromBackend, postStringToBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
 import WebSocketResponse from "../model/websocket/webSocketResponse";
+import AuthorizeModal from "../components/common/authorizeModal";
 
 interface Props {
     id: number;
 }
 interface State {
     room?: MRoom;
+    roomAuthorized: boolean;
     roomSet: boolean;
     deleted: boolean;
+    authorizing: boolean;
 }
 class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
             roomSet: false,
-            deleted: false
+            roomAuthorized: false,
+            deleted: false,
+            authorizing: false
         }
     }
     private webSocketService?: WebsocketService;
-    componentDidMount() {
-        const connect = () => {
-            this.webSocketService?.connect(
-                () => {
-                    this.webSocketService &&
-                        this.webSocketService.subscribe(
-                            WS_SUB,
-                            message => {
-                                if (message.body) {
-                                    try {
-                                        const response: WebSocketResponse = JSON.parse(message.body);
-                                        // console.log("received " + response.type + " from websocket: ", response.content)
-                                        switch (response.type) {
-                                            case 'delete':
-                                                this.setState({ deleted: true })
-                                                break;
-                                            case 'data':
-                                                const room: MRoom = JSON.parse(response.content);
-                                                this.setState({ room: room })
-                                                break;
-                                        }
-                                    } catch{
-                                        console.error("Unable to parse body " + message.body)
+    connect = () => {
+        this.webSocketService?.connect(
+            () => {
+                this.webSocketService &&
+                    this.webSocketService.subscribe(
+                        WS_SUB,
+                        message => {
+                            if (message.body) {
+                                try {
+                                    const response: WebSocketResponse = JSON.parse(message.body);
+                                    // console.log("received " + response.type + " from websocket: ", response.content)
+                                    switch (response.type) {
+                                        case 'delete':
+                                            this.setState({ deleted: true })
+                                            break;
+                                        case 'data':
+                                            const room: MRoom = JSON.parse(response.content);
+                                            this.setState({ room: room })
+                                            break;
                                     }
+                                } catch{
+                                    console.error("Unable to parse body " + message.body)
                                 }
                             }
-                        );
-                    this.subscribe(this.props.id);
-                },
-                () => { },
-                () => {
-                    this.webSocketService?.sendMessage(WS_UNSUB,
-                        JSON.stringify({ roomId: this.props.id }))
-                },
-                () => { }
-            );
-        }
-
+                        }
+                    );
+                this.subscribe(this.props.id);
+            },
+            () => { },
+            () => {
+                this.webSocketService?.sendMessage(WS_UNSUB,
+                    JSON.stringify({ roomId: this.props.id }))
+            },
+            () => { }
+        );
+    }
+    async componentDidMount() {
         window.onbeforeunload = () => {
             this.webSocketService?.disconnect();
-            setTimeout(() => connect(), 2000); // Just in case that the confirm window appears and the user clicks 'cancel'
+            setTimeout(() => this.connect(), 2000); // Just in case that the confirm window appears and the user clicks 'cancel'
             return null;
         }
-
-
-        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
-            .then(res => this.setState({ room: res, roomSet: true }));
-        this.webSocketService = WebsocketService.getInstance();
-        connect();
+        await getJsonFromBackend(HAS_PWD + '?roomId=' + this.props.id)
+            .then(res => this.setState({ roomAuthorized: !res, authorizing: res }));
+        if (this.state.roomAuthorized) {
+            getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+                .then(res => this.setState({ room: res, roomSet: true }));
+            this.webSocketService = WebsocketService.getInstance();
+            this.connect();
+        }
     }
 
     componentWillUnmount() {
@@ -88,13 +94,23 @@ class RoomRaw extends React.Component<Props, State> {
     }
 
     render() {
+        if (!this.state.authorizing && this.state.roomAuthorized && !this.webSocketService) {
+            getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+                .then(res => this.setState({ room: res, roomSet: true }));
+            this.webSocketService = WebsocketService.getInstance();
+            this.connect();
+        }
+
         if (this.state.deleted) {
             return <>
                 <Redirect to="/roomClosed"></Redirect>
             </>
         }
-
+        if (!this.state.roomAuthorized) {
+            return <AuthorizeModal id={this.props.id} handleAbort={() => console.log("aborted")} handleSuccess={() => this.setState({ roomAuthorized: true, authorizing: false })}></AuthorizeModal>
+        }
         if (this.state.room) {
+
             return <>
                 <RoomPaper room={this.state.room!}></RoomPaper>
             </>

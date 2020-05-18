@@ -53,6 +53,14 @@ export function postDataToBackend(path: string, data: any): Promise<any> {
         body: JSON.stringify(data)
     });
 }
+export function postStringToBackend(path: string, data: string): Promise<any> {
+    return fetch(domain + path, {
+        method: 'POST',
+        headers: postHeaders,
+        body: data
+    })
+    .then(res=> res.json());
+}
 
 export async function addContribution(roomId: number, contributionText: string) {
     let added: boolean = false;

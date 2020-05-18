@@ -56,7 +56,7 @@ export default function SettingsModal(props: Props) {
             <Grid item><Typography variant="h4">Thema</Typography></Grid>
             <Grid item><TextField id="topic" helperText="Lege ein Thema für diesen Raum fest!" variant="outlined" size="small" value={state.topic} onChange={event => {
                 state.topic = event.target.value;
-                setState({ id: props.room.id, topic: event.target.value, contributions: props.room.contributions })
+                setState({ ...props.room, topic: event.target.value})
             }} /></Grid>
             <Grid item> <Button variant="text" onClick={() => setDeleteOpen(true)} className={classes.deleteBtn} startIcon={<DeleteIcon />}>Close Room</Button></Grid>
         </Grid>

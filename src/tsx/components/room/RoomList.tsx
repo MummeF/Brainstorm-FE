@@ -4,9 +4,9 @@ import { Dispatch, useState } from 'react';
 import MRoom from '../../model/roomModel';
 import { GET_ROOM_LST } from '../../tools/connections';
 import { getJsonFromBackend } from '../../tools/fetching';
-import CustomLoader from './customLoader';
+import CustomLoader from '../common/customLoader';
 import RoomElement from './RoomElement';
-import StyledMessage from './styledMessage';
+import StyledMessage from '../common/styledMessage';
 
 
 export interface IRoomListProps {
@@ -35,11 +35,15 @@ const RoomList: React.FunctionComponent<IRoomListProps> = (props: IRoomListProps
 
 
     let roomElements: JSX.Element[] | undefined;
-
+    console.log(roomList);
     roomElements = roomList?.map((room) => {
-        return <Grid item xs={isMobile.current ? 12 : 6}>
-            <RoomElement room={room} />
-        </Grid>
+        if (!room.public) {
+            return <></>;
+        } else {
+            return <Grid item xs={isMobile.current ? 12 : 6}>
+                <RoomElement room={room} />
+            </Grid>
+        }
     });
 
     const List = () => {

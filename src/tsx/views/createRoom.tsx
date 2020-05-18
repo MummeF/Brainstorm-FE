@@ -1,9 +1,13 @@
-import { Button, createStyles, Grid, Paper, TextField, Theme, Typography } from '@material-ui/core';
+import { Button, createStyles, FormControlLabel, Grid, Paper, Switch, TextField, Theme, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { CRT_ROOM } from '../tools/connections';
-import { getJsonFromBackend } from '../tools/fetching';
+import PasswordInput from '../components/common/passwordInput';
+import { CRT_ROOM, SET_PWD } from '../tools/connections';
+import { getJsonFromBackend, postStringToBackend } from '../tools/fetching';
+
+
+
 export interface ICreateRoomProps {
 
 }
@@ -21,6 +25,10 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
   const [topic, setTopic] = useState("");
   const [roomId, setRoomId] = useState();
   const [redirect, setRedirect] = useState(false);
+  const [publicRoom, setPublicRoom] = useState(false);
+  const [password, setPassword] = useState("");
+
+
 
   const classes = styles();
   if (redirect) {
@@ -43,12 +51,36 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
             <TextField size="small" variant="outlined" label="Thema" value={topic} onChange={(e) => setTopic(e.target.value)}></TextField>
           </Grid>
           <Grid item>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={publicRoom}
+                  onChange={() => setPublicRoom(!publicRoom)}
+                  name="publicRoom"
+                />}
+              label="Öffentlicher Raum"
+            />
+
+            {publicRoom ? <>
+              <Grid item>
+                <PasswordInput onPasswordChange={(next) => setPassword(next)} password={password} />
+              </Grid>
+            </> : <></>}
+          </Grid>
+
+          <Grid item>
             <Button variant="contained" color="primary" onClick={() => {
-              getJsonFromBackend(CRT_ROOM + '?topic=' + topic)
+              getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&moderatorId=bla')
                 .then(res => {
                   setRoomId(res);
                   setRedirect(true);
+                  return res;
                 })
+                .then(res => {
+                  if (password) {
+                    postStringToBackend(SET_PWD + '?roomId=' + res, password)
+                  }
+                });
             }}>Erstellen und beitreten</Button>
           </Grid>
         </Grid>
