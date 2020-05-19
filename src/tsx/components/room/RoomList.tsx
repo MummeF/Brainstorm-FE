@@ -35,7 +35,6 @@ const RoomList: React.FunctionComponent<IRoomListProps> = (props: IRoomListProps
 
 
     let roomElements: JSX.Element[] | undefined;
-    console.log(roomList);
     roomElements = roomList?.map((room) => {
         if (!room.public) {
             return <></>;

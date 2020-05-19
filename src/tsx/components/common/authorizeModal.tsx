@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Dialog, DialogTitle, Grid, TextField, Fab } from "@material-ui/core";
-import classes from "*.module.css";
+import { Button, Dialog, DialogTitle, Grid } from "@material-ui/core";
 import makeStyles from "@material-ui/styles/makeStyles";
-import { putAndGetJsonFromBackend, postStringToBackend } from "../../tools/fetching";
-import { UPDT_CTRBT, VLD_PWD } from "../../tools/connections";
+import React, { useState } from "react";
+import { VLD_PWD } from "../../tools/connections";
+import { postStringToBackend } from "../../tools/fetching";
 import PasswordInput from "./passwordInput";
 
 interface Props {
@@ -32,6 +31,7 @@ export default function AuthorizeModal(props: Props) {
     });
     const classes = useStyles();
     const [password, setPassword] = useState("");
+    const [errorText, setErrorText] = useState("");
 
     const [open, setOpen] = useState(true);
 
@@ -40,8 +40,8 @@ export default function AuthorizeModal(props: Props) {
             .then(res => {
                 if (res === true) {
                     props.handleSuccess();
-                }else{
-                    console.log(' pw falsch')
+                } else {
+                    setErrorText("Falsches Passwort!");
                 }
             })
     }
@@ -50,12 +50,31 @@ export default function AuthorizeModal(props: Props) {
         setPassword("")
         props.handleAbort();
     }
+
+    const keyHandler = (event: KeyboardEvent) => {
+        if (event.keyCode === 13) { // ENTER
+            handleValidate();
+        }
+    }
+
+    React.useEffect(() => {
+        document.addEventListener("keydown", keyHandler)
+        return () => {
+            document.removeEventListener("keydown", keyHandler)
+        }
+    })
     return (<>
         <Dialog onClose={closeWithoutValidate} aria-labelledby="simple-dialog-title" open={open}>
             <div className={classes.root}>
                 <DialogTitle id="simple-dialog-title">Passwort eingeben</DialogTitle>
-                <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">
-                    <PasswordInput password={password} onPasswordChange={(next)=> setPassword(next)} />
+                <Grid container className={classes.body} direction="row" justify="space-between" spacing={2} alignItems="center">
+                    <Grid item xs={9}>
+                        <PasswordInput className={classes.bodyItem} errorText={errorText} password={password} onPasswordChange={(next) => setPassword(next)} />
+                        <br />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Button className={classes.bodyItem} variant="contained" color="primary" onClick={handleValidate}>Enter</Button>
+                    </Grid>
                 </Grid>
             </div>
         </Dialog>

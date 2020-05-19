@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
+import AuthorizeModal from "../components/common/authorizeModal";
 import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
 import MRoom from "../model/roomModel";
-import { VAL_ROOM_ID, WS_SEND, WS_SUB, GET_ROOM, WS_UNSUB, VLD_PWD, HAS_PWD } from "../tools/connections";
-import { getJsonFromBackend, postStringToBackend } from "../tools/fetching";
-import WebsocketService from "../tools/websocketService";
 import WebSocketResponse from "../model/websocket/webSocketResponse";
-import AuthorizeModal from "../components/common/authorizeModal";
+import { GET_ROOM, HAS_PWD, VAL_ROOM_ID, WS_SEND, WS_SUB, WS_UNSUB } from "../tools/connections";
+import { getJsonFromBackend } from "../tools/fetching";
+import WebsocketService from "../tools/websocketService";
 
 interface Props {
     id: number;
+    authorizationNeeded: boolean;
 }
 interface State {
     room?: MRoom;
@@ -18,6 +19,7 @@ interface State {
     roomSet: boolean;
     deleted: boolean;
     authorizing: boolean;
+    authorizeAborted: boolean;
 }
 class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -26,7 +28,8 @@ class RoomRaw extends React.Component<Props, State> {
             roomSet: false,
             roomAuthorized: false,
             deleted: false,
-            authorizing: false
+            authorizing: false,
+            authorizeAborted: false,
         }
     }
     private webSocketService?: WebsocketService;
@@ -66,20 +69,24 @@ class RoomRaw extends React.Component<Props, State> {
             () => { }
         );
     }
-    async componentDidMount() {
+
+   
+
+    componentDidMount() {
+        getJsonFromBackend(HAS_PWD + '?roomId=' + this.props.id)
+            .then(res => this.setState({ roomAuthorized: !res, authorizing: res }));
+    }
+
+    initWebSocket() {
         window.onbeforeunload = () => {
             this.webSocketService?.disconnect();
             setTimeout(() => this.connect(), 2000); // Just in case that the confirm window appears and the user clicks 'cancel'
             return null;
         }
-        await getJsonFromBackend(HAS_PWD + '?roomId=' + this.props.id)
-            .then(res => this.setState({ roomAuthorized: !res, authorizing: res }));
-        if (this.state.roomAuthorized) {
-            getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
-                .then(res => this.setState({ room: res, roomSet: true }));
-            this.webSocketService = WebsocketService.getInstance();
-            this.connect();
-        }
+        getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
+            .then(res => this.setState({ room: res, roomSet: true }));
+        this.webSocketService = WebsocketService.getInstance();
+        this.connect();
     }
 
     componentWillUnmount() {
@@ -95,22 +102,20 @@ class RoomRaw extends React.Component<Props, State> {
 
     render() {
         if (!this.state.authorizing && this.state.roomAuthorized && !this.webSocketService) {
-            getJsonFromBackend(GET_ROOM + '?roomId=' + this.props.id)
-                .then(res => this.setState({ room: res, roomSet: true }));
-            this.webSocketService = WebsocketService.getInstance();
-            this.connect();
+            this.initWebSocket();
         }
-
         if (this.state.deleted) {
             return <>
                 <Redirect to="/roomClosed"></Redirect>
             </>
         }
-        if (!this.state.roomAuthorized) {
-            return <AuthorizeModal id={this.props.id} handleAbort={() => console.log("aborted")} handleSuccess={() => this.setState({ roomAuthorized: true, authorizing: false })}></AuthorizeModal>
+        if (this.state.authorizeAborted) {
+            return <Redirect to="/enterRoom" />
+        }
+        if (!this.state.roomAuthorized && this.state.authorizing) {
+            return <AuthorizeModal id={this.props.id} handleAbort={() =>this.setState({authorizeAborted: true})} handleSuccess={() => this.setState({ roomAuthorized: true, authorizing: false })}></AuthorizeModal>
         }
         if (this.state.room) {
-
             return <>
                 <RoomPaper room={this.state.room!}></RoomPaper>
             </>
@@ -140,7 +145,7 @@ export default function Room({ match }: RouteComponentProps<TParams>) {
             });
         if (verified !== -1) {
             if (verified === 1) {
-                return <RoomRaw id={+id}></RoomRaw>
+                return <RoomRaw authorizationNeeded={true} id={+id}></RoomRaw>
             } else {
                 return <Redirect to="/enterRoom"></Redirect>
             }

@@ -7,6 +7,10 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 interface Props {
     password: string;
     onPasswordChange(nextPassword: string): void;
+    // validatePassword?(password: string): boolean;
+    // validationText?: string;
+    className?: any;
+    errorText?: string;
     optional?: boolean;
 }
 
@@ -15,8 +19,8 @@ export default function PasswordInput(props: Props) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">Passwort{props.optional ? " (optional)" : ""}</InputLabel>
+        <FormControl className={props.className} variant="outlined">
+            <InputLabel error={props.errorText ? true : false} htmlFor="outlined-adornment-password">{props.errorText ? props.errorText : ('Passwort' + (props.optional ? " (optional)" : ""))}</InputLabel>
             <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPassword ? 'text' : 'password'}
@@ -33,7 +37,8 @@ export default function PasswordInput(props: Props) {
                         </IconButton>
                     </InputAdornment>
                 }
-                labelWidth={props.optional ? 140 : 70}
+                error={props.errorText ? true : false}
+                labelWidth={props.errorText ? props.errorText.length * 8 : props.optional ? 140 : 70}
             />
         </FormControl>);
 
