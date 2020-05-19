@@ -23,6 +23,7 @@ const styles = makeStyles((theme: Theme) =>
 );
 const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoomProps) => {
   const [topic, setTopic] = useState("");
+  const [description, setDescription] = useState("");
   const [roomId, setRoomId] = useState();
   const [redirect, setRedirect] = useState(false);
   const [publicRoom, setPublicRoom] = useState(false);
@@ -51,6 +52,13 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
             <TextField size="small" variant="outlined" label="Thema" value={topic} onChange={(e) => setTopic(e.target.value)}></TextField>
           </Grid>
           <Grid item>
+            <Typography variant="h4">Beschreibung</Typography>
+            <Typography variant="body2">Beschreibe dein Thema mit kurzen Worten</Typography>
+          </Grid>
+          <Grid item>
+            <TextField size="small" variant="outlined" label="Beschreibung" value={description} onChange={(e) => setDescription(e.target.value)}></TextField>
+          </Grid>
+          <Grid item>
             <FormControlLabel
               control={
                 <Switch
@@ -70,7 +78,7 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
 
           <Grid item>
             <Button variant="contained" color="primary" onClick={() => {
-              getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&moderatorId=bla')
+              getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&description=' + description + '&moderatorId=bla') //TODO
                 .then(res => {
                   setRoomId(res);
                   setRedirect(true);

@@ -1,4 +1,4 @@
-export const BACKEND_LOCAL = false
+export const BACKEND_LOCAL = true
 
 export const BACKEND_DOMAIN = BACKEND_LOCAL ? "localhost:8080" : "brainstorm-dhbw-backend.herokuapp.com"
 export const BACKEND_URL = (BACKEND_LOCAL ? "http" : "https") + "://" + BACKEND_DOMAIN
@@ -22,6 +22,7 @@ export const GET_CTRBT = API_PREFIX + "/getContribution" // ?roomId: long & cont
 export const GET_ROOM_LST = API_PREFIX + "/getRoomList" //  returns Room[]
 export const VLD_PWD = API_PREFIX + "/validatePassword" // ?roomId: long & body: password: string ---  returns boolean
 export const HAS_PWD = API_PREFIX + "/hasPassword" // ?roomId: long  ---  returns boolean
+export const INC_STT = API_PREFIX + "/increaseRoomState" // ?roomId: long  ---  returns boolean
 
 
 //Websocket

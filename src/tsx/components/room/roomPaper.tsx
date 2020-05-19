@@ -1,16 +1,18 @@
-import { Button, Fab, Grid, IconButton, makeStyles, Paper, Typography, TextField, setRef } from "@material-ui/core";
+import { Button, Fab, Grid, IconButton, makeStyles, Paper, setRef, TextField, Typography } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
+import CheckIcon from '@material-ui/icons/Check';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import SettingsIcon from '@material-ui/icons/Settings';
-import React, { useRef, useState, useEffect } from "react";
+import ShareIcon from '@material-ui/icons/Share';
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import MRoom from "../../model/roomModel";
 import StyledMessage from "../common/styledMessage";
 import Contribution from "./contribution";
 import ContributionModal from "./contributionModal";
 import SettingsModal from "./settingsModal";
-import CheckIcon from '@material-ui/icons/Check';
-import ShareIcon from '@material-ui/icons/Share';
+import { getJsonFromBackend } from "../../tools/fetching";
+import { INC_STT } from "../../tools/connections";
 
 interface Props {
     room: MRoom
@@ -23,6 +25,18 @@ export default function RoomPaper(props: Props) {
 
     const [share, setShare] = useState(false);
     const [copied, setCopied] = useState(false);
+    const updateState = useCallback(() => {
+        switch (props.room.state) {
+            case "CREATE":
+                return 0;
+            case "EDIT":
+                return 1;
+            case "DONE":
+                return 2;
+        }
+    }, [props.room])
+
+    const [state, setState] = useState(updateState())
 
     // const theme = useTheme();
 
@@ -43,6 +57,10 @@ export default function RoomPaper(props: Props) {
         },
         linkInput: {
             direction: "rtl",
+        },
+        stateField: {
+            textAlign: "right",
+            width: "100%"
         }
     });
     const classes = useStyles();
@@ -66,6 +84,9 @@ export default function RoomPaper(props: Props) {
     })
 
 
+    useEffect(() => {
+        setState(updateState());
+    }, [props.room, updateState])
     const room = props.room;
 
     const contributions: JSX.Element[] = []
@@ -114,9 +135,48 @@ export default function RoomPaper(props: Props) {
         </>
     }
 
+    const increaseState = () => {
+        getJsonFromBackend(INC_STT + '?roomId=' + props.room.id);
+    }
+
+    const StateField = () => {
+        switch (state) {
+            case 0:
+                return <Grid container justify="flex-end" direction="row">
+                    <Grid item>
+                        <Button onClick={increaseState}>Nächste Phase</Button>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h5">Create-Phase!</Typography>
+                    </Grid>
+                </Grid>
+            case 1:
+                return <Grid container justify="flex-end" direction="row">
+                    <Grid item>
+                        <Button onClick={increaseState}>Nächste Phase</Button>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h5">Edit-Phase!</Typography>
+                    </Grid>
+                </Grid>
+            case 2:
+                return <Grid container justify="flex-end" direction="row">
+                    <Grid item>
+                        <Button onClick={increaseState}>Nächste Phase</Button>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h5">Ergebnis-Phase!</Typography>
+                    </Grid>
+                </Grid>
+        }
+        return <></>;
+    }
+
     return <>
         <SettingsModal open={settingsOpen} room={props.room} handleClose={handleSettingsClose}></SettingsModal>
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
+
+
         <Grid container justify="space-between" direction="row">
             <Grid item xs={6}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>
             <Grid className={classes.share} item xs={4}>
@@ -124,6 +184,18 @@ export default function RoomPaper(props: Props) {
             </Grid>
             <Grid item xs={2}><SettingsButton /></Grid>
         </Grid>
+
+
+        <Grid container justify="space-between" direction="row">
+            <Grid item xs={6}>
+                <Typography variant="body1">{props.room.description}</Typography>
+            </Grid>
+            <Grid className={classes.stateField} item xs={6}>
+                <StateField />
+            </Grid>
+        </Grid>
+
+
         <Paper elevation={1} className={classes.root}>
             <Grid container direction="row" justify="flex-end">
                 <Grid item>
