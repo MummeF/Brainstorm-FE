@@ -1,17 +1,18 @@
-import { Card, CardContent, Grid, makeStyles, Typography, useTheme, setRef, IconButton } from "@material-ui/core";
+import { Card, CardContent, Grid, IconButton, makeStyles, setRef, Typography, useTheme } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import React, { useState } from "react";
-import MContribution from "../../model/contributionModel";
-import { REM_CTRBT } from "../../tools/connections";
-import { deleteAndGetJsonFromBackend } from "../../tools/fetching";
+import MContribution from "../../../model/contributionModel";
+import { REM_CTRBT } from "../../../tools/connections";
+import { deleteAndGetJsonFromBackend } from "../../../tools/fetching";
 import EditModal from "./editModal";
 
 interface Props {
     contribution: MContribution;
     roomId: number;
+    roomState?: number;
 }
 
 export default function Contribution(props: Props) {
@@ -68,6 +69,9 @@ export default function Contribution(props: Props) {
     }
 
     const DeleteAndEditButtons = () => {
+        if (props.roomState !== 1) {
+            return <></>;
+        }
         if (isMobile.current) {
             if (mobileDialOpen) {
                 return <Grid container direction="row">

@@ -8,11 +8,12 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import MRoom from "../../model/roomModel";
 import StyledMessage from "../common/styledMessage";
-import Contribution from "./contribution";
-import ContributionModal from "./contributionModal";
+import Contribution from "./contribution/contribution";
+import ContributionModal from "./contribution/contributionModal";
 import SettingsModal from "./settingsModal";
 import { getJsonFromBackend } from "../../tools/fetching";
 import { INC_STT } from "../../tools/connections";
+import { Redirect } from "react-router-dom";
 
 interface Props {
     room: MRoom
@@ -92,7 +93,7 @@ export default function RoomPaper(props: Props) {
     const contributions: JSX.Element[] = []
     room.contributions?.forEach(cont => {
         contributions.push(<Grid item key={cont.id} className={classes.contribution} xs={isMobile.current ? 12 : 6}>
-            <Contribution roomId={room.id} contribution={cont}></Contribution>
+            <Contribution roomState={state} roomId={room.id} contribution={cont}></Contribution>
         </Grid>)
     })
 
@@ -160,14 +161,7 @@ export default function RoomPaper(props: Props) {
                     </Grid>
                 </Grid>
             case 2:
-                return <Grid container justify="flex-end" direction="row">
-                    <Grid item>
-                        <Button onClick={increaseState}>Nächste Phase</Button>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="h5">Ergebnis-Phase!</Typography>
-                    </Grid>
-                </Grid>
+                return <Redirect to={"/result/" + props.room.id} />
         }
         return <></>;
     }

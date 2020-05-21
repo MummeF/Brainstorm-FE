@@ -5,7 +5,7 @@ import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
 import MRoom from "../model/roomModel";
 import WebSocketResponse from "../model/websocket/webSocketResponse";
-import { GET_ROOM, HAS_PWD, VAL_ROOM_ID, WS_SEND, WS_SUB, WS_UNSUB } from "../tools/connections";
+import { GET_ROOM, HAS_PWD, VAL_ROOM_ID, WS_SUB, WS_TPC, WS_UNSUB } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
 
@@ -38,7 +38,7 @@ class RoomRaw extends React.Component<Props, State> {
             () => {
                 this.webSocketService &&
                     this.webSocketService.subscribe(
-                        WS_SUB,
+                        WS_TPC,
                         message => {
                             if (message.body) {
                                 try {
@@ -95,7 +95,7 @@ class RoomRaw extends React.Component<Props, State> {
 
     private subscribe(roomId: number): void {
         this.webSocketService?.sendMessage(
-            WS_SEND,
+            WS_SUB,
             JSON.stringify({ roomId: roomId })
         );
     }
@@ -122,7 +122,6 @@ class RoomRaw extends React.Component<Props, State> {
         } else {
             return <CustomLoader></CustomLoader>
         }
-
     }
 }
 

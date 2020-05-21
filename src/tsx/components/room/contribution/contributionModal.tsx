@@ -1,7 +1,7 @@
 import { Dialog, DialogTitle, Fab, Grid, makeStyles, TextField } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
 import React, { useState } from "react";
-import { addContribution } from "../../tools/fetching";
+import { addContribution } from "../../../tools/fetching";
 
 interface Props {
     open: boolean;

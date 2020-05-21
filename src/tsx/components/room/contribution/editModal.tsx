@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { TextField, makeStyles, Grid, Dialog, DialogTitle, Fab } from "@material-ui/core";
 import SendIcon from '@material-ui/icons/Send';
-import { putAndGetJsonFromBackend } from "../../tools/fetching";
-import { UPDT_CTRBT } from "../../tools/connections";
-import CustomLoader from "../common/customLoader";
-import MContribution from "../../model/contributionModel";
+import { putAndGetJsonFromBackend } from "../../../tools/fetching";
+import { UPDT_CTRBT } from "../../../tools/connections";
+import CustomLoader from "../../common/customLoader";
+import MContribution from "../../../model/contributionModel";
 
 interface Props {
     open: boolean;

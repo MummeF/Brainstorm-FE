@@ -7,6 +7,7 @@ import CreateRoom from "../views/createRoom";
 import Room from "../views/room";
 import RoomClose from "../views/roomClose";
 import Page404 from "../views/404";
+import Result from "../views/result";
 
 interface InternalRoute {
     path: string;
@@ -52,6 +53,12 @@ const routes: InternalRoute[] = [
         path: "/room/:id",
         name: "Raum",
         component: Room,
+        exact: true
+    },
+    {
+        path: "/result/:id",
+        name: "Ergebnis",
+        component: Result,
         exact: true
     },
 

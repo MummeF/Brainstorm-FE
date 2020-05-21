@@ -12,15 +12,7 @@ export interface ICreateRoomProps {
 
 }
 
-const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "80%",
-      margin: "auto",
-      padding: "1em"
-    }
-  })
-);
+
 const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoomProps) => {
   const [topic, setTopic] = useState("");
   const [description, setDescription] = useState("");
@@ -29,6 +21,15 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
   const [publicRoom, setPublicRoom] = useState(false);
   const [password, setPassword] = useState("");
 
+  const styles = makeStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        width: "80%",
+        margin: "auto",
+        padding: "1em"
+      },
+    })
+  );
 
 
   const classes = styles();
