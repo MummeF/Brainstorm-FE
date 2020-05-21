@@ -7,17 +7,18 @@ import GlobalHint from "./tsx/components/common/globalHint";
 import Header from "./tsx/components/common/header";
 import Routes from "./tsx/navigation/routes";
 import { backendOnline } from "./tsx/tools/fetching";
+import CookieModal from "./tsx/components/common/cookieModal";
 
 export default function Root() {
     // const theme = useTheme();
     const isMobile = React.useRef(window.innerWidth < 480);
     React.useEffect(() => {
-        setRef(isMobile, window.innerWidth < 480) 
+        setRef(isMobile, window.innerWidth < 480)
     });
     const useStyles = makeStyles({
         root: {
             margin: "auto",
-            width: isMobile.current? "90%": "75%",
+            width: isMobile.current ? "90%" : "75%",
         },
     });
 
@@ -34,6 +35,7 @@ export default function Root() {
     } else {
         return <>
             <BrowserRouter>
+                <CookieModal></CookieModal>
                 <Header></Header>
                 <br />
                 <div className={classes.root}>

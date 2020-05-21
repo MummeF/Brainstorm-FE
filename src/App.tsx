@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import Root from './Root';
-import {  grey } from '@material-ui/core/colors';
-
+import { grey } from '@material-ui/core/colors';
+import { CookiesProvider } from 'react-cookie';
 
 
 
@@ -12,10 +12,10 @@ const theme = createMuiTheme({
     primary: {
       main: "#a5d6a7",
     },
-    secondary:  {
+    secondary: {
       main: "#757575",
     },
-    background:{
+    background: {
       paper: grey[100]
     }
   },
@@ -33,9 +33,11 @@ const theme = createMuiTheme({
 function App() {
   return (
     <>
-     <ThemeProvider  theme={theme}>
-            <Root />
-        </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <CookiesProvider>
+          <Root />
+        </CookiesProvider>
+      </ThemeProvider>
     </>
   );
 }

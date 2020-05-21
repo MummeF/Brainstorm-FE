@@ -2,27 +2,33 @@ import { Button, Fab, Grid, IconButton, makeStyles, Paper, setRef, TextField, Ty
 import AddIcon from '@material-ui/icons/Add';
 import CheckIcon from '@material-ui/icons/Check';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+import GavelIcon from '@material-ui/icons/Gavel';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShareIcon from '@material-ui/icons/Share';
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCookies } from "react-cookie";
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { Redirect } from "react-router-dom";
+import { v4 as generateRndModId } from 'uuid';
 import MRoom from "../../model/roomModel";
+import { INC_STT, SET_MOD_ID } from "../../tools/connections";
+import { getJsonFromBackend } from "../../tools/fetching";
 import StyledMessage from "../common/styledMessage";
 import Contribution from "./contribution/contribution";
 import ContributionModal from "./contribution/contributionModal";
+import ModAuthModal from "./ModAuthModal";
 import SettingsModal from "./settingsModal";
-import { getJsonFromBackend } from "../../tools/fetching";
-import { INC_STT } from "../../tools/connections";
-import { Redirect } from "react-router-dom";
 
 interface Props {
-    room: MRoom
+    room: MRoom,
+    isMod: boolean
 }
 
 
 export default function RoomPaper(props: Props) {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [contributionOpen, setContributionOpen] = useState(false);
+    const [modAuthOpen, setModAuthOpen] = useState(false);
 
     const [share, setShare] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -38,6 +44,9 @@ export default function RoomPaper(props: Props) {
     }, [props.room])
 
     const [state, setState] = useState(updateState())
+
+
+    const [cookies, setCookie] = useCookies(['modId']);
 
     // const theme = useTheme();
 
@@ -78,11 +87,23 @@ export default function RoomPaper(props: Props) {
     const handleContsOpen = () => {
         setContributionOpen(true)
     }
+    const handleModAuthClose = () => {
+        setModAuthOpen(false)
+    }
+    const handleModAuthOpen = () => {
+        setModAuthOpen(true)
+    }
 
     const isMobile = useRef(window.innerWidth < 480);
     useEffect(() => {
         setRef(isMobile, window.innerWidth < 480)
     })
+    const setModId = () => {
+        if (!cookies.modId) {
+            const modId: string = generateRndModId();
+            setCookie('modId', modId, { sameSite: "strict" });
+        }
+    }
 
 
     useEffect(() => {
@@ -98,10 +119,18 @@ export default function RoomPaper(props: Props) {
     })
 
     const SettingsButton = () => {
-        if (isMobile.current) {
-            return <IconButton aria-label="settingsbutton" onClick={handleSettingsOpen}><SettingsIcon /></IconButton>
+        if (props.isMod) {
+            if (isMobile.current) {
+                return <IconButton aria-label="settingsbutton" onClick={handleSettingsOpen}><SettingsIcon /></IconButton>
+            } else {
+                return <Button variant="text" color="primary" endIcon={<SettingsIcon />} onClick={handleSettingsOpen}>Raum bearbeiten</Button>
+            }
         } else {
-            return <Button variant="text" color="primary" endIcon={<SettingsIcon />} onClick={handleSettingsOpen}>Raum bearbeiten</Button>
+            if (isMobile.current) {
+                return <IconButton aria-label="settingsbutton" onClick={handleModAuthOpen}><GavelIcon /></IconButton>
+            } else {
+                return <Button variant="text" color="primary" endIcon={<GavelIcon />} onClick={handleModAuthOpen}>Moderator anfordern</Button>
+            }
         }
     }
 
@@ -109,13 +138,13 @@ export default function RoomPaper(props: Props) {
         if (isMobile.current) {
             return <IconButton aria-label="shareIcon" onClick={() => setShare(true)}><ShareIcon /></IconButton>
         } else {
-            return <Button startIcon={<ShareIcon />} variant="text" color="secondary" onClick={() => setShare(true)}>Share Link</Button>
+            return <Button startIcon={<ShareIcon />} variant="text" color="secondary" onClick={() => setShare(true)}>Link Teilen</Button>
         }
     }
 
     const CopyButton = () => {
         if (copied) {
-            return <Button startIcon={<CheckIcon />} variant="text" color="secondary">Copied</Button>;
+            return <Button startIcon={<CheckIcon />} variant="text" color="secondary">Kopiert</Button>;
         } else {
             return <CopyToClipboard text={window.location.href} onCopy={() => {
                 setCopied(true);
@@ -124,7 +153,7 @@ export default function RoomPaper(props: Props) {
                     setShare(false);
                 }, 2000);
             }}>
-                <Button variant="text" color="secondary" startIcon={<FileCopyIcon />}>Copy Link</Button>
+                <Button variant="text" color="secondary" startIcon={<FileCopyIcon />}>Link kopieren</Button>
             </CopyToClipboard>
         }
     }
@@ -141,6 +170,9 @@ export default function RoomPaper(props: Props) {
     }
 
     const StateField = () => {
+        if(!props.isMod){
+            return null;
+        }
         switch (state) {
             case 0:
                 return <Grid container justify="flex-end" direction="row">
@@ -169,7 +201,11 @@ export default function RoomPaper(props: Props) {
     return <>
         <SettingsModal open={settingsOpen} room={props.room} handleClose={handleSettingsClose}></SettingsModal>
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
-
+        <ModAuthModal open={modAuthOpen} id={room.id} handleSuccess={async () => {
+            handleModAuthClose();
+            await setModId();
+            getJsonFromBackend(SET_MOD_ID + '?roomId=' + props.room.id + '&moderatorId=' + cookies.modId);
+        }} handleAbort={handleModAuthClose} />
 
         <Grid container justify="space-between" direction="row">
             <Grid item xs={6}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>

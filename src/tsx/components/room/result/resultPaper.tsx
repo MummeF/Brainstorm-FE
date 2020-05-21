@@ -8,6 +8,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Printable from "../../common/printable";
 import Contribution from "../contribution/contribution";
+import PrintIcon from '@material-ui/icons/Print';
 
 interface Props {
     room: MRoom;
@@ -100,7 +101,10 @@ export default function ResultPaper(props: Props) {
     }
 
     const PrintButton = () => {
-        return <Button>Print</Button>
+        if (isMobile.current) {
+            return <IconButton aria-label="printbutton"><PrintIcon /></IconButton>
+        }
+        return <Button startIcon={<PrintIcon />} variant="text" color="secondary" >Print</Button>
     }
 
     const printRef: MutableRefObject<undefined | Printable> = useRef();

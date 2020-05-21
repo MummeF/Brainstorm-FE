@@ -16,11 +16,15 @@ export const VAL_ROOM_ID = API_PREFIX + "/validateRoomId" //? roomId : long --- 
 export const GET_ROOM = API_PREFIX + "/getRoom" //? roomId : long --- returns RoomModel
 export const UPDT_ROOM = API_PREFIX + "/updateRoom" // body: Room --- returns string => res.ok ? success : denied
 export const REM_ROOM = API_PREFIX + "/deleteRoom" // ?roomId: long --- returns string => res.ok ? success : denied
-export const INC_STT = API_PREFIX + "/increaseRoomState" // ?roomId: long  ---  returns boolean
+export const INC_STT = API_PREFIX + "/increaseRoomState" // ?roomId: long  ---  returns boolean  
+export const VAL_MOD_ID = API_PREFIX + "/validateModeratorId" // ?roomId: long & moderatorId: string ---  returns boolean  
+export const SET_MOD_ID = API_PREFIX + "/setModeratorId" // ?roomId: long & moderatorId: string ---  returns boolean  
 //History
 export const HIST_GET_ROOM = API_PREFIX + "/getHistoryRoom" // ?roomId: long  ---  returns RoomModel
 //PW
 export const SET_PWD = API_PREFIX + "/setPassword" //? roomId?: long & body: password: string --- returns long
+export const SET_MOD_PWD = API_PREFIX + "/setModeratorPassword" //? roomId?: long & body: password: string --- returns long
+export const VLD_MOD_PWD = API_PREFIX + "/validateModeratorPassword" // ?roomId: long & body: password: string ---  returns boolean
 export const VLD_PWD = API_PREFIX + "/validatePassword" // ?roomId: long & body: password: string ---  returns boolean
 export const HAS_PWD = API_PREFIX + "/hasPassword" // ?roomId: long  ---  returns boolean
 //Lists

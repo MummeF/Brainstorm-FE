@@ -5,13 +5,14 @@ import CustomLoader from "../components/common/customLoader";
 import RoomPaper from "../components/room/roomPaper";
 import MRoom from "../model/roomModel";
 import WebSocketResponse from "../model/websocket/webSocketResponse";
-import { GET_ROOM, HAS_PWD, VAL_ROOM_ID, WS_SUB, WS_TPC, WS_UNSUB } from "../tools/connections";
+import { GET_ROOM, HAS_PWD, VAL_ROOM_ID, WS_SUB, WS_TPC, WS_UNSUB, VAL_MOD_ID } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
+import { useCookies } from "react-cookie";
 
 interface Props {
     id: number;
-    authorizationNeeded: boolean;
+    modId: string;
 }
 interface State {
     room?: MRoom;
@@ -20,6 +21,7 @@ interface State {
     deleted: boolean;
     authorizing: boolean;
     authorizeAborted: boolean;
+    isMod: boolean;
 }
 class RoomRaw extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -30,6 +32,7 @@ class RoomRaw extends React.Component<Props, State> {
             deleted: false,
             authorizing: false,
             authorizeAborted: false,
+            isMod: false,
         }
     }
     private webSocketService?: WebsocketService;
@@ -52,6 +55,11 @@ class RoomRaw extends React.Component<Props, State> {
                                             const room: MRoom = JSON.parse(response.content);
                                             this.setState({ room: room })
                                             break;
+                                        case 'mod-update':
+                                            getJsonFromBackend(VAL_MOD_ID + '?roomId=' + this.props.id + '&moderatorId=' + this.props.modId)
+                                                .then(res => {
+                                                    this.setState({ isMod: res })
+                                                })
                                     }
                                 } catch{
                                     console.error("Unable to parse body " + message.body)
@@ -70,11 +78,15 @@ class RoomRaw extends React.Component<Props, State> {
         );
     }
 
-   
+
 
     componentDidMount() {
         getJsonFromBackend(HAS_PWD + '?roomId=' + this.props.id)
             .then(res => this.setState({ roomAuthorized: !res, authorizing: res }));
+        getJsonFromBackend(VAL_MOD_ID + '?roomId=' + this.props.id + '&moderatorId=' + this.props.modId)
+            .then(res => {
+                this.setState({ isMod: res })
+            })
     }
 
     initWebSocket() {
@@ -113,11 +125,15 @@ class RoomRaw extends React.Component<Props, State> {
             return <Redirect to="/enterRoom" />
         }
         if (!this.state.roomAuthorized && this.state.authorizing) {
-            return <AuthorizeModal id={this.props.id} handleAbort={() =>this.setState({authorizeAborted: true})} handleSuccess={() => this.setState({ roomAuthorized: true, authorizing: false })}></AuthorizeModal>
+            if (this.state.isMod) {
+                this.setState({ roomAuthorized: true, authorizing: false });
+            } else {
+                return <AuthorizeModal id={this.props.id} handleAbort={() => this.setState({ authorizeAborted: true })} handleSuccess={() => this.setState({ roomAuthorized: true, authorizing: false })}></AuthorizeModal>
+            }
         }
         if (this.state.room) {
             return <>
-                <RoomPaper room={this.state.room!}></RoomPaper>
+                <RoomPaper isMod={this.state.isMod} room={this.state.room!}></RoomPaper>
             </>
         } else {
             return <CustomLoader></CustomLoader>
@@ -130,6 +146,7 @@ type TParams = { id: string }
 
 export default function Room({ match }: RouteComponentProps<TParams>) {
     const [verified, setVerified] = useState(-1);
+    const [cookies] = useCookies(['modId']);
 
     if (match.params) {
         let id: string = match.params.id;
@@ -144,7 +161,7 @@ export default function Room({ match }: RouteComponentProps<TParams>) {
             });
         if (verified !== -1) {
             if (verified === 1) {
-                return <RoomRaw authorizationNeeded={true} id={+id}></RoomRaw>
+                return <RoomRaw modId={cookies.modId} id={+id}></RoomRaw>
             } else {
                 return <Redirect to="/enterRoom"></Redirect>
             }
