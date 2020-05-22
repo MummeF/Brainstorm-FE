@@ -8,11 +8,17 @@ import MContribution from "../../../model/contributionModel";
 import { REM_CTRBT } from "../../../tools/connections";
 import { deleteAndGetJsonFromBackend } from "../../../tools/fetching";
 import EditModal from "./editModal";
+import SubjectModal from "./subjectModal";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+
+
 
 interface Props {
     contribution: MContribution;
     roomId: number;
     roomState?: number;
+    subjects?: string[];
 }
 
 export default function Contribution(props: Props) {
@@ -23,6 +29,7 @@ export default function Contribution(props: Props) {
     React.useEffect(() => {
         setRef(isMobile, window.innerWidth < 480)
     });
+
 
     const useStyles = makeStyles({
         root: {
@@ -61,6 +68,16 @@ export default function Contribution(props: Props) {
     const handleEditClose = () => {
         setEditOpen(false);
     };
+    const [subjectOpen, setSubjectOpen] = React.useState(false);
+
+    const handleSubjectOpen = () => {
+        setSubjectOpen(true);
+        setMobileDialOpen(false);
+    };
+
+    const handleSubjectClose = () => {
+        setSubjectOpen(false);
+    };
 
     const deleteContribution = () => {
         deleteAndGetJsonFromBackend(REM_CTRBT + '?roomId=' + props.roomId + '&contributionId=' + props.contribution.id);
@@ -75,31 +92,39 @@ export default function Contribution(props: Props) {
         if (isMobile.current) {
             if (mobileDialOpen) {
                 return <Grid container direction="row">
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
+                        <IconButton size="small"
+                            onClick={handleSubjectOpen}
+                            className={classes.editBtn}>
+                            <PostAddIcon />
+                        </IconButton>
+                    </Grid>
+                    <Grid item xs={4}>
                         <IconButton size="small"
                             onClick={handleEditOpen}
                             className={classes.editBtn}>
                             <EditIcon />
                         </IconButton>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
                         <IconButton size="small"
                             onClick={deleteContribution}
                             className={classes.deleteBtn}>
                             <DeleteIcon />
                         </IconButton>
                     </Grid>
+
                 </Grid>;
             } else {
                 return <IconButton onClick={() => setMobileDialOpen(true)} size="small">
-                    <EditIcon />
+                    <MoreHorizIcon />
                 </IconButton>
             }
 
         } else {
             return <SpeedDial
                 ariaLabel=""
-                icon={<EditIcon />}
+                icon={<MoreHorizIcon />}
                 onClose={handleClose}
                 onOpen={handleOpen}
                 open={dialOpen}
@@ -118,6 +143,13 @@ export default function Contribution(props: Props) {
                     icon={<EditIcon />}
                     tooltipTitle="Edit"
                     onClick={handleEditOpen}
+                />
+                <SpeedDialAction
+                    className={classes.editBtn}
+                    key="Add Subject"
+                    icon={<PostAddIcon />}
+                    tooltipTitle="Add Subject"
+                    onClick={handleSubjectOpen}
                 />
             </SpeedDial>
         }
@@ -141,5 +173,6 @@ export default function Contribution(props: Props) {
             </CardContent>
         </Card>
         <EditModal open={editOpen} handleClose={handleEditClose} roomId={props.roomId} contribution={props.contribution}></EditModal>
+        <SubjectModal subjects={props.subjects? props.subjects: []} open={subjectOpen} handleClose={handleSubjectClose} roomId={props.roomId} contribution={props.contribution} />
     </>);
 }

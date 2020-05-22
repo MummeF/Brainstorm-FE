@@ -84,8 +84,8 @@ const YesNoOption: React.FunctionComponent<IYesNoOptionProps> = (props: IYesNoOp
                         <Grid item xs><Typography color="inherit" align="center" variant="body1">{props.question}</Typography></Grid>
                     </Grid>
                     <Grid item container spacing={2} className={classes.body} direction="row" justify="center" alignItems="center">
-                        <Grid item xs><Button onClick={props.onYesOption} className={classes.yesBtn} variant="outlined">Yes</Button></Grid>
-                        <Grid item xs><Button onClick={props.onNoOption} className={classes.noBtn} variant="outlined">No</Button></Grid>
+                        <Grid item xs><Button onClick={props.onYesOption} className={classes.yesBtn} variant="outlined">Ja</Button></Grid>
+                        <Grid item xs><Button onClick={props.onNoOption} className={classes.noBtn} variant="outlined">Nein</Button></Grid>
                     </Grid>
                 </Grid>
             </Dialog>

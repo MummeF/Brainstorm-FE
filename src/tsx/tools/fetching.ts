@@ -59,14 +59,15 @@ export function postStringToBackend(path: string, data: string): Promise<any> {
         headers: postHeaders,
         body: data
     })
-    .then(res=> res.json());
+        .then(res => res.json());
 }
 
 export async function addContribution(roomId: number, contributionText: string) {
     let added: boolean = false;
     let contribution: MContribution = {
         content: contributionText,
-        id: -1
+        id: -1,
+        subject: ""
     }
     await postDataToBackend(ADD_CTRBT + '?roomId=' + roomId, contribution)
         .then(res => {

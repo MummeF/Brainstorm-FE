@@ -18,6 +18,7 @@ export default function Root() {
     const useStyles = makeStyles({
         root: {
             margin: "auto",
+            marginBottom: "2.5em",
             width: isMobile.current ? "90%" : "75%",
         },
     });

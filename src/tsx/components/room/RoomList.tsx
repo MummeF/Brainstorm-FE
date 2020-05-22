@@ -33,11 +33,12 @@ const RoomList: React.FunctionComponent<IRoomListProps> = (props: IRoomListProps
 
 
 
+    const publicRoomExisting: boolean = roomList?.find((value) => value.public && value.state !== 'DONE') ? true : false;
 
-    let roomElements: JSX.Element[] | undefined;
+    let roomElements: (JSX.Element | null)[] | undefined;
     roomElements = roomList?.map((room) => {
-        if (!room.public) {
-            return <></>;
+        if (!room.public || room.state === 'DONE') {
+            return null;
         } else {
             return <Grid item xs={isMobile.current ? 12 : 6}>
                 <RoomElement room={room} />
@@ -47,7 +48,7 @@ const RoomList: React.FunctionComponent<IRoomListProps> = (props: IRoomListProps
 
     const List = () => {
         if (roomElements) {
-            if (roomElements.length > 0) {
+            if (publicRoomExisting) {
                 return <> {roomElements}</>;
             } else {
                 return <StyledMessage message="Keine öffentlichen Räume registriert" />;

@@ -132,6 +132,9 @@ class RoomRaw extends React.Component<Props, State> {
             }
         }
         if (this.state.room) {
+            if (this.state.room.state === 'DONE') {
+                return <Redirect to={'/result/' + this.state.room.id} />
+            }
             return <>
                 <RoomPaper isMod={this.state.isMod} room={this.state.room!}></RoomPaper>
             </>

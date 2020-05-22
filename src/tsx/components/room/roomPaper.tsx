@@ -18,6 +18,8 @@ import Contribution from "./contribution/contribution";
 import ContributionModal from "./contribution/contributionModal";
 import ModAuthModal from "./ModAuthModal";
 import SettingsModal from "./settingsModal";
+import YesNoOption from "../common/yesNoOption";
+import SkipNextIcon from '@material-ui/icons/SkipNext';
 
 interface Props {
     room: MRoom,
@@ -29,6 +31,8 @@ export default function RoomPaper(props: Props) {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [contributionOpen, setContributionOpen] = useState(false);
     const [modAuthOpen, setModAuthOpen] = useState(false);
+    const [confirmEditOpen, setConfirmEditOpen] = useState(false);
+    const [confirmDoneOpen, setConfirmDoneOpen] = useState(false)
 
     const [share, setShare] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -41,7 +45,7 @@ export default function RoomPaper(props: Props) {
             case "DONE":
                 return 2;
         }
-    }, [props.room])
+    }, [props])
 
     const [state, setState] = useState(updateState())
 
@@ -111,12 +115,63 @@ export default function RoomPaper(props: Props) {
     }, [props.room, updateState])
     const room = props.room;
 
-    const contributions: JSX.Element[] = []
-    room.contributions?.forEach(cont => {
-        contributions.push(<Grid item key={cont.id} className={classes.contribution} xs={isMobile.current ? 12 : 6}>
-            <Contribution roomState={state} roomId={room.id} contribution={cont}></Contribution>
-        </Grid>)
+    const subjects: string[] = [...new Set(props.room.contributions.map(cont => cont.subject))].filter(Boolean);
+
+    let prevSubject: string = "";
+    const contributions: JSX.Element[] = room.contributions?.sort((a, b) => {
+        if (!a.subject || !b.subject) {
+            return 0;
+        }
+        return a.subject.toLowerCase().localeCompare(b.subject.toLowerCase());
     })
+        .map(cont => {
+            let Subject = () => { return <></> };
+            if (prevSubject !== cont.subject) {
+                prevSubject = cont.subject;
+                Subject = () => {
+                    return <Grid item xs={12}>
+                        <Typography variant="h4">{cont.subject ? cont.subject : "Kein Titel zugeordnet"}</Typography>
+                    </Grid>
+                }
+            }
+            return <>
+                <Subject />
+                <Grid item key={cont.id} className={classes.contribution} xs={isMobile.current ? 12 : 6}>
+                    <Contribution subjects={subjects} roomState={state} roomId={room.id} contribution={cont}></Contribution>
+                </Grid>
+            </>
+        }
+        );
+
+    const ConfirmNextStateModal = () => {
+        if (state === 0) {
+            return <YesNoOption
+                open={confirmEditOpen}
+                title="Bist Du sicher?"
+                question="Möchtest du in die Edit-Phase wechseln?"
+                severity="info"
+                yesFilled
+                onNoOption={() => setConfirmEditOpen(false)}
+                onYesOption={() => {
+                    setConfirmEditOpen(false);
+                    increaseState();
+                }} />
+        } else if (state === 1) {
+            return <YesNoOption
+                open={confirmDoneOpen}
+                title="Bist Du sicher?"
+                question="Möchtest du in die Ergebnis-Phase wechseln?"
+                severity="info"
+                yesFilled
+                onNoOption={() => setConfirmDoneOpen(false)}
+                onYesOption={() => {
+                    setConfirmDoneOpen(false);
+                    increaseState();
+                }} />
+        } else {
+            return null;
+        }
+    }
 
     const SettingsButton = () => {
         if (props.isMod) {
@@ -168,29 +223,42 @@ export default function RoomPaper(props: Props) {
     const increaseState = () => {
         getJsonFromBackend(INC_STT + '?roomId=' + props.room.id);
     }
+    const setNextState = () => {
+        if (state === 0) {
+            setConfirmEditOpen(true);
+        } else if (state === 1) {
+            setConfirmDoneOpen(true);
+        }
+    }
 
     const StateField = () => {
-        if(!props.isMod){
-            return null;
-        }
+
         switch (state) {
             case 0:
-                return <Grid container justify="flex-end" direction="row">
+                return <Grid container justify="flex-end" alignItems="center" spacing={isMobile.current ? 0 : 3} direction="row">
                     <Grid item>
-                        <Button onClick={increaseState}>Nächste Phase</Button>
+                        <Typography variant="h5">{isMobile.current ? 'Create' : 'Create-Phase!'}</Typography>
                     </Grid>
-                    <Grid item>
-                        <Typography variant="h5">Create-Phase!</Typography>
-                    </Grid>
+                    {props.isMod ?
+                        <Grid item>
+                            {isMobile.current ? <IconButton onClick={setNextState} ><SkipNextIcon /></IconButton>
+                                : <Button endIcon={<SkipNextIcon />} color="primary" size="small" variant="contained" onClick={setNextState}>Next</Button>
+                            }
+                        </Grid>
+                        : <></>}
                 </Grid>
             case 1:
-                return <Grid container justify="flex-end" direction="row">
+                return <Grid container justify="flex-end" alignItems="center" spacing={isMobile.current ? 0 : 3} direction="row">
                     <Grid item>
-                        <Button onClick={increaseState}>Nächste Phase</Button>
+                        <Typography variant="h5">{isMobile.current ? 'Edit' : 'Edit-Phase!'}</Typography>
                     </Grid>
-                    <Grid item>
-                        <Typography variant="h5">Edit-Phase!</Typography>
-                    </Grid>
+                    {props.isMod ?
+                        <Grid item>
+                            {isMobile.current ? <IconButton onClick={setNextState} ><SkipNextIcon /></IconButton>
+                                : <Button endIcon={<SkipNextIcon />} color="primary" size="small" variant="contained" onClick={setNextState}>Next</Button>
+                            }
+                        </Grid>
+                        : <></>}
                 </Grid>
             case 2:
                 return <Redirect to={"/result/" + props.room.id} />
@@ -206,6 +274,7 @@ export default function RoomPaper(props: Props) {
             await setModId();
             getJsonFromBackend(SET_MOD_ID + '?roomId=' + props.room.id + '&moderatorId=' + cookies.modId);
         }} handleAbort={handleModAuthClose} />
+        <ConfirmNextStateModal />
 
         <Grid container justify="space-between" direction="row">
             <Grid item xs={6}><Typography variant="h3">{(room.topic ? room.topic : ('Raum ' + room.id))}</Typography></Grid>
@@ -225,7 +294,7 @@ export default function RoomPaper(props: Props) {
             </Grid>
         </Grid>
 
-
+        <br />
         <Paper elevation={1} className={classes.root}>
             <Grid container direction="row" justify="flex-end">
                 <Grid item>

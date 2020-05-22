@@ -15,6 +15,12 @@ interface Props {
 }
 
 export default function ResultPaper(props: Props) {
+    const isMobile = useRef(window.innerWidth < 480);
+    useEffect(() => {
+        setRef(isMobile, window.innerWidth < 480)
+    })
+
+
     // const theme = useTheme();
 
     const useStyles = makeStyles({
@@ -47,28 +53,44 @@ export default function ResultPaper(props: Props) {
     const [share, setShare] = useState(false);
     const [copied, setCopied] = useState(false);
 
+    let prevSubject: string = "";
+    const contributions: JSX.Element[] = props.room.contributions?.sort((a, b) => {
+        if (!a.subject || !b.subject) {
+            return 0;
+        }
+        return a.subject.toLowerCase().localeCompare(b.subject.toLowerCase());
+    })
+        .map(cont => {
+            let Subject = () => { return <></> };
+            if (prevSubject !== cont.subject) {
+                prevSubject = cont.subject;
+                Subject = () => {
+                    return <Grid item xs={12}>
+                        <Typography variant="h4">{cont.subject ? cont.subject : "Kein Titel zugeordnet"}</Typography>
+                    </Grid>
+                }
+            }
+            return <>
+                <Subject />
+                <Grid item key={cont.id} xs={isMobile.current ? 12 : 6}>
+                    <Contribution roomState={0} roomId={props.room.id} contribution={cont}></Contribution>
+                </Grid>
+            </>
+        }
+        );
+
     const Container = () => {
         return <>
             <Paper elevation={1} className={classes.root} >
                 <br />
                 <Grid container direction="row" spacing={2}>
-                    {
-                        props.room.contributions.map(cont => {
-                            return <Grid item xs={isMobile.current ? 12 : 6}>
-                                <Contribution contribution={cont} roomId={props.room.id} roomState={0}></Contribution>
-                            </Grid>
-                        })
-                    }
+                    {contributions}
                 </Grid>
             </Paper>
         </>;
     }
 
 
-    const isMobile = useRef(window.innerWidth < 480);
-    useEffect(() => {
-        setRef(isMobile, window.innerWidth < 480)
-    })
 
     const ShareButton = () => {
         if (isMobile.current) {

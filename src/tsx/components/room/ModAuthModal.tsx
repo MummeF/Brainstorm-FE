@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogTitle, Grid } from "@material-ui/core";
 import makeStyles from "@material-ui/styles/makeStyles";
 import React, { useState } from "react";
-import { VLD_PWD, VLD_MOD_PWD } from "../../tools/connections";
+import { VLD_MOD_PWD } from "../../tools/connections";
 import { postStringToBackend } from "../../tools/fetching";
 import PasswordInput from "../common/passwordInput";
 
