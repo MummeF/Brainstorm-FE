@@ -40,7 +40,9 @@ export default function SubjectModal(props: Props) {
 
 
     const handleSend = () => {
-        putAndGetJsonFromBackend(UPDT_CTRBT + '?roomId=' + props.roomId + '&contributionId=' + props.contribution.id + '&subject=' + subject);
+        if (subject) {
+            putAndGetJsonFromBackend(UPDT_CTRBT + '?roomId=' + props.roomId + '&contributionId=' + props.contribution.id + '&subject=' + subject);
+        }
     }
     const closeWithoutSend = () => {
         setLoaded(false)
@@ -59,7 +61,13 @@ export default function SubjectModal(props: Props) {
             return <CustomLoader></CustomLoader>
         } else {
             return (
-                <Dialog onClose={closeWithoutSend} aria-labelledby="simple-dialog-title" open={props.open}>
+                <Dialog onKeyUp={(e) => {
+                    switch (e.keyCode) {
+                        case 13: //enter
+                            closeAndSend();
+                            break;
+                    }
+                }} onClose={closeWithoutSend} aria-labelledby="simple-dialog-title" open={props.open}>
                     <div className={classes.root}>
                         <DialogTitle id="simple-dialog-title">Titel bearbeiten</DialogTitle>
                         <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">

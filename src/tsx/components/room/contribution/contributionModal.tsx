@@ -31,7 +31,9 @@ export default function ContributionModal(props: Props) {
     });
     const classes = useStyles();
     const handleSend = () => {
-        addContribution(props.roomId, contributionText);
+        if(contributionText){
+            addContribution(props.roomId, contributionText);
+        }
     }
     const closeWithoutSend = () => {
         setContributionText("")
@@ -43,11 +45,22 @@ export default function ContributionModal(props: Props) {
     }
 
     return (
-        <Dialog onClose={closeWithoutSend} aria-labelledby="simple-dialog-title" open={props.open}>
+        <Dialog
+            onKeyUp={(e) => {
+                switch (e.keyCode) {
+                    case 13: //enter
+                        closeAndSend();
+                        break;
+                }
+            }}
+            onClose={closeWithoutSend}
+            aria-labelledby="simple-dialog-title"
+            open={props.open}>
             <div className={classes.root}>
                 <DialogTitle id="simple-dialog-title">Neuer Beitrag</DialogTitle>
                 <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">
-                    <Grid item xs><TextField value={contributionText}
+                    <Grid item xs><TextField
+                        value={contributionText}
                         onChange={(event) => setContributionText(event.target.value)}
                         className={classes.bodyItem}
                         label="Hier Beitrag eingeben"></TextField></Grid>
@@ -58,6 +71,8 @@ export default function ContributionModal(props: Props) {
                     </Grid>
                 </Grid>
             </div>
-        </Dialog>);
+        </Dialog>
+
+    );
 
 }

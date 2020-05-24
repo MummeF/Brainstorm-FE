@@ -1,13 +1,13 @@
 import React from "react";
 import Home from "../views/home";
 import { Route, Switch } from "react-router-dom";
-import Kontakt from "../views/kontakt";
 import EnterRoom from "../views/enterRoom";
 import CreateRoom from "../views/createRoom";
 import Room from "../views/room";
 import RoomClose from "../views/roomClose";
 import Page404 from "../views/404";
 import Result from "../views/result";
+import About from "../views/about";
 
 interface InternalRoute {
     path: string;
@@ -32,9 +32,9 @@ const routes: InternalRoute[] = [
         exact: true
     },
     {
-        path: "/contact",
-        name: "Kontakt",
-        child: <Kontakt></Kontakt>,
+        path: "/about",
+        name: "Über uns",
+        child: <About></About>,
         exact: true
     },
     {

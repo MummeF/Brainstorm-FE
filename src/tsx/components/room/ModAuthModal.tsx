@@ -50,20 +50,14 @@ export default function ModAuthModal(props: Props) {
         props.handleAbort();
     }
 
-    const keyHandler = (event: KeyboardEvent) => {
-        if (event.keyCode === 13) { // ENTER
-            handleValidate();
-        }
-    }
-
-    React.useEffect(() => {
-        document.addEventListener("keydown", keyHandler)
-        return () => {
-            document.removeEventListener("keydown", keyHandler)
-        }
-    })
     return (<>
-        <Dialog onClose={closeWithoutValidate} aria-labelledby="simple-dialog-title" open={props.open}>
+        <Dialog onKeyUp={(e) => {
+            switch (e.keyCode) {
+                case 13: //enter
+                    handleValidate();
+                    break;
+            }
+        }} onClose={closeWithoutValidate} aria-labelledby="simple-dialog-title" open={props.open}>
             <div className={classes.root}>
                 <DialogTitle id="simple-dialog-title">Moderator Passwort eingeben, um Rechte anzufordern!</DialogTitle>
                 <Grid container className={classes.body} direction="row" justify="space-between" spacing={2} alignItems="center">

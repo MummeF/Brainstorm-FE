@@ -5,6 +5,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import GavelIcon from '@material-ui/icons/Gavel';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShareIcon from '@material-ui/icons/Share';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -14,12 +15,11 @@ import MRoom from "../../model/roomModel";
 import { INC_STT, SET_MOD_ID } from "../../tools/connections";
 import { getJsonFromBackend } from "../../tools/fetching";
 import StyledMessage from "../common/styledMessage";
+import YesNoOption from "../common/yesNoOption";
 import Contribution from "./contribution/contribution";
 import ContributionModal from "./contribution/contributionModal";
 import ModAuthModal from "./ModAuthModal";
 import SettingsModal from "./settingsModal";
-import YesNoOption from "../common/yesNoOption";
-import SkipNextIcon from '@material-ui/icons/SkipNext';
 
 interface Props {
     room: MRoom,
@@ -48,7 +48,6 @@ export default function RoomPaper(props: Props) {
     }, [props])
 
     const [state, setState] = useState(updateState())
-
 
     const [cookies, setCookie] = useCookies(['modId']);
 

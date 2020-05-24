@@ -1,6 +1,6 @@
 import { Button, Grid, makeStyles, useTheme } from "@material-ui/core";
 import HomeIcon from '@material-ui/icons/Home';
-import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import InfoIcon from '@material-ui/icons/Info';
 import React from "react";
 import { NavLink } from "react-router-dom";
 
@@ -40,7 +40,7 @@ export default function Footer() {
                     <Button color="secondary" variant="text" startIcon={<HomeIcon />} component={NavLink} to="/">Home</Button>
                 </Grid>
                 <Grid item xs className={classes.footer}>
-                    <Button color="secondary" variant="text" startIcon={<ImportContactsIcon />} component={NavLink} to="/contact">Kontakt</Button>
+                    <Button color="secondary" variant="text" startIcon={<InfoIcon />} component={NavLink} to="/about">Über uns</Button>
                 </Grid>
                 {/* <Grid item xs={3}></Grid>
                 <Grid item xs={6} className={classes.footerText}> <Typography variant="h6">© 2020 Brainstorm &nbsp;</Typography></Grid> */}

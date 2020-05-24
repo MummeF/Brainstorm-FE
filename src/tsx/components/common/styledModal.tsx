@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal, useTheme, makeStyles, Grid, Paper, AppBar, Toolbar, Button, Typography } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
+
+
 interface Props extends RawProps {
     classes: any;
 }
@@ -63,7 +65,7 @@ interface RawProps {
     title?: string;
     handleClose(): void;
 }
-export const StyledModal = (props: RawProps) => {
+export default function StyledModal(props: RawProps) {
     const theme = useTheme();
 
     const useStyles = makeStyles({
@@ -88,10 +90,12 @@ export const StyledModal = (props: RawProps) => {
     });
     const classes = useStyles();
 
-    return <StyledModalRaw
-        title={props.title}
-        open={props.open} body={props.body}
-        handleClose={props.handleClose}
-        classes={classes}
-    ></StyledModalRaw>
+    return <>
+        <StyledModalRaw
+            title={props.title}
+            open={props.open} body={props.body}
+            handleClose={props.handleClose}
+            classes={classes}
+        ></StyledModalRaw>
+    </>
 }

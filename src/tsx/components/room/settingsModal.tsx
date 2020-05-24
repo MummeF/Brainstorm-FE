@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import MRoom from "../../model/roomModel";
 import { REM_ROOM } from "../../tools/connections";
 import { deleteAndGetJsonFromBackend, updateRoom } from "../../tools/fetching";
-import { StyledModal } from "../common/styledModal";
+import StyledModal from "../common/styledModal";
 import YesNoOption from "../common/yesNoOption";
 
 interface Props {
@@ -55,22 +55,23 @@ export default function SettingsModal(props: Props) {
         <Grid container className={classes.root} direction="column" spacing={1}>
             <Grid item><Typography variant="h4">Thema</Typography></Grid>
             <Grid item><TextField id="topic" helperText="Lege ein Thema für diesen Raum fest!" variant="outlined" size="small" value={state.topic} onChange={event => {
-                state.topic = event.target.value;
-                setState({ ...props.room, topic: event.target.value})
+                setState({ ...props.room, topic: event.target.value })
+            }} /></Grid>
+            <Grid item><Typography variant="h4">Beschreibung</Typography></Grid>
+            <Grid item><TextField id="description" helperText="Beschreibe Deinen Raum mit kurzen Worten!" variant="outlined" size="small" value={state.description} onChange={event => {
+                setState({ ...props.room, description: event.target.value })
             }} /></Grid>
             <Grid item> <Button variant="text" onClick={() => setDeleteOpen(true)} className={classes.deleteBtn} startIcon={<DeleteIcon />}>Close Room</Button></Grid>
         </Grid>
-
-
-
-
     </>)
+
+    const close = () => {
+        updateRoom(state);
+        props.handleClose();
+    }
     return (
         <>
-            <StyledModal open={props.open} body={body} handleClose={() => {
-                updateRoom(state);
-                props.handleClose();
-            }} title="Settings"></StyledModal>
+            <StyledModal open={props.open} body={body} handleClose={close} title="Settings"></StyledModal>
             <YesNoOption
                 open={deleteOpen}
                 question="Bist Du sicher?"

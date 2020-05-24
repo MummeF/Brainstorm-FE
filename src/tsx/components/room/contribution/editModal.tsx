@@ -56,7 +56,17 @@ export default function EditModal(props: Props) {
             return <CustomLoader></CustomLoader>
         } else {
             return (
-                <Dialog onClose={closeWithoutSend} aria-labelledby="simple-dialog-title" open={props.open}>
+                <Dialog
+                    onKeyUp={(e) => {
+                        switch (e.keyCode) {
+                            case 13: //enter
+                                closeAndSend();
+                                break;
+                        }
+                    }}
+                    onClose={closeWithoutSend}
+                    aria-labelledby="simple-dialog-title"
+                    open={props.open}>
                     <div className={classes.root}>
                         <DialogTitle id="simple-dialog-title">Beitrag bearbeiten</DialogTitle>
                         <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">

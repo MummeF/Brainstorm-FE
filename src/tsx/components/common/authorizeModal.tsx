@@ -50,21 +50,14 @@ export default function AuthorizeModal(props: Props) {
         setPassword("")
         props.handleAbort();
     }
-
-    const keyHandler = (event: KeyboardEvent) => {
-        if (event.keyCode === 13) { // ENTER
-            handleValidate();
-        }
-    }
-
-    React.useEffect(() => {
-        document.addEventListener("keydown", keyHandler)
-        return () => {
-            document.removeEventListener("keydown", keyHandler)
-        }
-    })
     return (<>
-        <Dialog onClose={closeWithoutValidate} aria-labelledby="simple-dialog-title" open={open}>
+        <Dialog onKeyUp={(e) => {
+            switch (e.keyCode) {
+                case 13: //enter
+                    handleValidate();
+                    break;
+            }
+        }} onClose={closeWithoutValidate} aria-labelledby="simple-dialog-title" open={open}>
             <div className={classes.root}>
                 <DialogTitle id="simple-dialog-title">Passwort eingeben</DialogTitle>
                 <Grid container className={classes.body} direction="row" justify="space-between" spacing={2} alignItems="center">
