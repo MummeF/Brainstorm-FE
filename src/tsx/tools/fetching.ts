@@ -67,7 +67,9 @@ export async function addContribution(roomId: number, contributionText: string) 
     let contribution: MContribution = {
         content: contributionText,
         id: -1,
-        subject: ""
+        subject: "",
+        reputation: 0,
+        comments: []
     }
     await postDataToBackend(ADD_CTRBT + '?roomId=' + roomId, contribution)
         .then(res => {
