@@ -36,12 +36,17 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
 
   const [cookies, setCookie] = useCookies(['modId']);
 
-  const setModId = () => {
+  const setModId: Promise<boolean> = new Promise(async (resolve, reject) => {
     if (!cookies.modId) {
       const modId: string = generateRndModId();
-      setCookie('modId', modId, { sameSite: "strict" });
+      console.log(modId)
+      await setCookie('modId', modId, { sameSite: "strict", path: "/" })
+      if (!cookies.modId) {
+        return reject();
+      }
     }
-  }
+    return resolve(true);
+  })
 
 
   const classes = styles();
@@ -101,26 +106,29 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
 
           <Grid item>
             <Button variant="contained" color="primary" onClick={async () => {
-              await setModId();
-              if (!modPassword) {
-                setModPwRequired(true);
-                return;
-              }
-              getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&description=' + description + '&moderatorId=' + cookies.modId) //TODO
+              setModId
                 .then(res => {
-                  setRoomId(res);
-                  setRedirect(true);
-                  return res;
-                })
-                .then(res => {
-                  postStringToBackend(SET_MOD_PWD + '?roomId=' + res, modPassword)
-                  return res;
-                })
-                .then(res => {
-                  if (password) {
-                    postStringToBackend(SET_PWD + '?roomId=' + res, password)
+                  console.log(res);
+                  if (!modPassword) {
+                    setModPwRequired(true);
+                    return;
                   }
-                  return res;
+                  getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&description=' + description + '&moderatorId=' + cookies.modId)
+                    .then(res => {
+                      setRoomId(res);
+                      setRedirect(true);
+                      return res;
+                    })
+                    .then(res => {
+                      postStringToBackend(SET_MOD_PWD + '?roomId=' + res, modPassword)
+                      return res;
+                    })
+                    .then(res => {
+                      if (password) {
+                        postStringToBackend(SET_PWD + '?roomId=' + res, password)
+                      }
+                      return res;
+                    });
                 });
             }}>Erstellen und beitreten</Button>
           </Grid>

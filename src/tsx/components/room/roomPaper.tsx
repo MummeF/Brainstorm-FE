@@ -105,7 +105,7 @@ export default function RoomPaper(props: Props) {
     const setModId = () => {
         if (!cookies.modId) {
             const modId: string = generateRndModId();
-            setCookie('modId', modId, { sameSite: "strict" });
+            setCookie('modId', modId, { sameSite: "lax", path: "/" });
         }
     }
 

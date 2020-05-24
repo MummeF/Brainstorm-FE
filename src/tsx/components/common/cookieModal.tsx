@@ -37,7 +37,7 @@ const CookieModal: React.FunctionComponent = () => {
                         </DialogContentText>
                     </div>
                     <DialogActions>
-                        <Button startIcon={<CheckIcon />} onClick={() => setCookie('cookieAccepted', true)} color="primary" variant="contained">Akzeptieren</Button>
+                        <Button startIcon={<CheckIcon />} onClick={() => setCookie('cookieAccepted', true, { sameSite: "lax", path: "/" })} color="primary" variant="contained">Akzeptieren</Button>
                     </DialogActions>
                 </div>
             </Dialog>);
