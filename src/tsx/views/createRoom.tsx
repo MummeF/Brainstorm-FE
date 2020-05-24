@@ -39,7 +39,7 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
   const setModId: Promise<boolean> = new Promise(async (resolve, reject) => {
     if (!cookies.modId) {
       const modId: string = generateRndModId();
-      await setCookie('modId', modId, { sameSite: "strict", path: "/" })
+      await setCookie('modId', modId, { sameSite: "strict", path: "/", secure: true })
       if (!cookies.modId) {
         return reject();
       }
