@@ -87,7 +87,7 @@ export default function EnterRoom() {
         return (<>
             <GlobalHint open={alertOpen} timeout={3000} onClose={onClose} severity="error">Die eingegebene Raum-Id war nicht korrekt.</GlobalHint>
             <Grid container direction="row" justify="space-between">
-                <Grid item xs={isMobile.current ? 12 : 8}><Typography variant="h3">Einem Raum beitreten</Typography></Grid>
+                <Grid item xs={isMobile.current ? 12 : 8}><Typography variant="h3">Raum beitreten</Typography></Grid>
                 {isMobile.current ? <br /> : <></>}
                 <Grid item xs={isMobile.current ? 12 : 2} container direction="row" alignItems="flex-start" justify="space-around" spacing={1}>
                     <Grid item xs={9} className={classes.idTextField}> <TextField
@@ -95,7 +95,7 @@ export default function EnterRoom() {
                         error={invalidInput}
                         helperText={invalidInput ? "Die Raum-ID besteht aus 6 Ziffern" : ""}
                         id="roomId"
-                        label="Raum-ID eingeben"
+                        label="Raum-ID"
                         variant="outlined"
                         onChange={event => checkInput(event.target.value)} /></Grid>
                     <Grid item xs={3}>
