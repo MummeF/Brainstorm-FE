@@ -7,8 +7,8 @@ import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import React, { useState } from "react";
 import MContribution from "../../../model/contributionModel";
-import { REM_CTRBT } from "../../../tools/connections";
-import { deleteAndGetJsonFromBackend } from "../../../tools/fetching";
+import { REM_CTRBT, VT_CTRBT_DN, VT_CTRBT_UP } from "../../../tools/connections";
+import getFromBackend, { deleteAndGetJsonFromBackend } from "../../../tools/fetching";
 import CommentSection from "./comment/commentSection";
 import EditModal from "./editModal";
 import SubjectModal from "./subjectModal";
@@ -170,8 +170,8 @@ export default function Contribution(props: Props) {
                 {props.roomState !== 0 ? <Grid item xs={1}>
                     <VoteField vote={props.contribution.reputation}
                         hideArrow={props.roomState === 2}
-                        onVoteDown={() => { console.log("down") }}
-                        onVoteUp={() => { console.log("up") }} />
+                        onVoteDown={() => getFromBackend(`${VT_CTRBT_DN}?roomId=${props.roomId}&contributionId=${props.contribution.id}`)}
+                        onVoteUp={() => getFromBackend(`${VT_CTRBT_UP}?roomId=${props.roomId}&contributionId=${props.contribution.id}`)} />
                 </Grid> : <></>}
 
                 <Grid item xs={props.roomState !== 0 ? 11 : 12}>
