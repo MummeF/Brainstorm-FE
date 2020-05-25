@@ -3,10 +3,11 @@ export default interface MContribution{
     content: string;
     subject: string;
     reputation: number;
-    comments: Comment[];
+    comments: MComment[];
 }
 
-export default interface Comment {
+export interface MComment {
+    id: number;
     content: string;
     reputation: number;
 }

@@ -1,16 +1,18 @@
 import { Card, CardContent, Grid, IconButton, makeStyles, setRef, Typography, useTheme } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import React, { useState } from "react";
 import MContribution from "../../../model/contributionModel";
 import { REM_CTRBT } from "../../../tools/connections";
 import { deleteAndGetJsonFromBackend } from "../../../tools/fetching";
+import CommentSection from "./comment/commentSection";
 import EditModal from "./editModal";
 import SubjectModal from "./subjectModal";
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import PostAddIcon from '@material-ui/icons/PostAdd';
+import VoteField from "./voteField";
 
 
 
@@ -24,6 +26,7 @@ interface Props {
 export default function Contribution(props: Props) {
     const theme = useTheme();
     const [mobileDialOpen, setMobileDialOpen] = useState(false);
+
 
     const isMobile = React.useRef(window.innerWidth < 480);
     React.useEffect(() => {
@@ -45,6 +48,11 @@ export default function Contribution(props: Props) {
         editBtn: {
             color: theme.palette.success.main
         },
+
+        commentPanel: {
+            maxHeight: "10em",
+            width: "100%",
+        }
 
     });
     const classes = useStyles();
@@ -157,22 +165,45 @@ export default function Contribution(props: Props) {
 
     return (<>
         <Card className={classes.root}>
-            <CardContent>
-                <Grid direction="row"
-                    container
-                    justify="space-between"
-                    alignItems="flex-start">
-                    <Grid item xs={isMobile.current ? 9 : 11}><Typography className={classes.text} variant="body1">{props.contribution.content}</Typography></Grid>
-                    {/* hier unter Umständen bearbeiten einfügen */}
-                    <Grid item xs={isMobile.current ? mobileDialOpen ? 3 : 1 : 1}>
-                        <DeleteAndEditButtons />
-                    </Grid>
+            <Grid container
+                direction="row">
+                {props.roomState !== 0 ? <Grid item xs={1}>
+                    <VoteField vote={props.contribution.reputation}
+                        hideArrow={props.roomState === 2}
+                        onVoteDown={() => { console.log("down") }}
+                        onVoteUp={() => { console.log("up") }} />
+                </Grid> : <></>}
+
+                <Grid item xs={props.roomState !== 0 ? 11 : 12}>
+                    <CardContent>
+
+                        <Grid direction="row"
+                            container
+                            justify="space-between"
+                            alignItems="flex-start">
+                            <Grid item xs={isMobile.current ? 9 : 11}><Typography className={classes.text} variant="body1">{props.contribution.content}</Typography></Grid>
+                            {/* hier unter Umständen bearbeiten einfügen */}
+                            <Grid item xs={isMobile.current ? mobileDialOpen ? 3 : 1 : 1}>
+                                <DeleteAndEditButtons />
+                            </Grid>
+                        </Grid>
+                    </CardContent>
                 </Grid>
 
 
-            </CardContent>
+            </Grid>
+            {props.roomState !== 0 ? <Grid direction="row"
+                container
+                justify="space-between"
+                alignItems="flex-start">
+                <Grid item xs={12}>
+                    <CommentSection roomState={props.roomState!} roomId={props.roomId} contribution={props.contribution} />
+                </Grid>
+            </Grid> : <></>}
+
+
         </Card>
         <EditModal open={editOpen} handleClose={handleEditClose} roomId={props.roomId} contribution={props.contribution}></EditModal>
-        <SubjectModal subjects={props.subjects? props.subjects: []} open={subjectOpen} handleClose={handleSubjectClose} roomId={props.roomId} contribution={props.contribution} />
+        <SubjectModal subjects={props.subjects ? props.subjects : []} open={subjectOpen} handleClose={handleSubjectClose} roomId={props.roomId} contribution={props.contribution} />
     </>);
 }

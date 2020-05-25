@@ -1,4 +1,4 @@
-export const BACKEND_LOCAL = false
+export const BACKEND_LOCAL = true
 
 
 export const BACKEND_DOMAIN = BACKEND_LOCAL ? "localhost:8080" : "brainstorm-dhbw-backend.herokuapp.com"
@@ -35,6 +35,12 @@ export const ADD_CTRBT = API_PREFIX + "/addContribution" // body: Contribution -
 export const REM_CTRBT = API_PREFIX + "/deleteContribution" // ?roomId: long & contributionId: long --- returns string => res.ok ? success : denied
 export const UPDT_CTRBT = API_PREFIX + "/updateContribution" // ?roomId: long & contributionId: long & content: string & subject: string --- returns string => res.ok ? success : denied
 export const GET_CTRBT = API_PREFIX + "/getContribution" // ?roomId: long & contributionId: long  --- returns Contribution
+
+//Comment
+
+export const ADD_CMT = API_PREFIX + "/addComment" //?roomId: number & contributionId: number & body: content: string --- returns boolean => res.ok ? success : denied
+export const VT_CMT_UP = API_PREFIX + "/voteCommentUp" //?roomId: number & contributionId: number & commentId: number --- returns boolean => res.ok ? success : denied
+export const VT_CMT_DN = API_PREFIX + "/voteCommentDown" //?roomId: number & contributionId: number & commentId: number --- returns boolean => res.ok ? success : denied
 
 //Common
 export const IS_ALIVE = API_PREFIX + "/isAlive" //returns string => res.ok ? online : offline

@@ -118,10 +118,13 @@ export default function RoomPaper(props: Props) {
 
     let prevSubject: string = "";
     const contributions: JSX.Element[] = room.contributions?.sort((a, b) => {
-        if (!a.subject || !b.subject) {
+        if (!a.subject) {
+            return 1;
+        }
+        if (!b.subject) {
             return 0;
         }
-        return a.subject.toLowerCase().localeCompare(b.subject.toLowerCase());
+        return (a.subject).toLowerCase().localeCompare((b.subject).toLowerCase());
     })
         .map(cont => {
             let Subject = () => { return <></> };

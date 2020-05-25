@@ -55,10 +55,13 @@ export default function ResultPaper(props: Props) {
 
     let prevSubject: string = "";
     const contributions: JSX.Element[] = props.room.contributions?.sort((a, b) => {
-        if (!a.subject || !b.subject) {
+        if (!a.subject) {
+            return 1;
+        }
+        if (!b.subject) {
             return 0;
         }
-        return a.subject.toLowerCase().localeCompare(b.subject.toLowerCase());
+        return (a.subject).toLowerCase().localeCompare((b.subject).toLowerCase());
     })
         .map(cont => {
             let Subject = () => { return <></> };
@@ -73,7 +76,7 @@ export default function ResultPaper(props: Props) {
             return <>
                 <Subject />
                 <Grid item key={cont.id} xs={isMobile.current ? 12 : 6}>
-                    <Contribution roomState={0} roomId={props.room.id} contribution={cont}></Contribution>
+                    <Contribution roomState={2} roomId={props.room.id} contribution={cont}></Contribution>
                 </Grid>
             </>
         }

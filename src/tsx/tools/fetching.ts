@@ -1,6 +1,5 @@
-import { BACKEND_URL, CORS_ANYWHERE, BACKEND_LOCAL, IS_ALIVE, UPDT_ROOM, ADD_CTRBT } from "./connections"
 import MRoom from "../model/roomModel";
-import MContribution from "../model/contributionModel";
+import { ADD_CTRBT, BACKEND_LOCAL, BACKEND_URL, CORS_ANYWHERE, IS_ALIVE, UPDT_ROOM } from "./connections";
 
 const user = 'fe-tech-user'
 const pass = '+vq#3RL!ygE%f&HLM?t_'
@@ -64,14 +63,7 @@ export function postStringToBackend(path: string, data: string): Promise<any> {
 
 export async function addContribution(roomId: number, contributionText: string) {
     let added: boolean = false;
-    let contribution: MContribution = {
-        content: contributionText,
-        id: -1,
-        subject: "",
-        reputation: 0,
-        comments: []
-    }
-    await postDataToBackend(ADD_CTRBT + '?roomId=' + roomId, contribution)
+    await postStringToBackend(ADD_CTRBT + '?roomId=' + roomId, contributionText)
         .then(res => {
             if (res.ok) {
                 added = true
