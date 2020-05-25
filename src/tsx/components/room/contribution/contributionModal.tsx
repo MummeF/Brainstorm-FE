@@ -31,7 +31,7 @@ export default function ContributionModal(props: Props) {
     });
     const classes = useStyles();
     const handleSend = () => {
-        if(contributionText){
+        if (contributionText) {
             addContribution(props.roomId, contributionText);
         }
     }
@@ -58,8 +58,10 @@ export default function ContributionModal(props: Props) {
             open={props.open}>
             <div className={classes.root}>
                 <DialogTitle id="simple-dialog-title">Neuer Beitrag</DialogTitle>
-                <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">
+                <Grid container className={classes.body} direction="row" justify="space-between" spacing={1} alignItems="flex-end">
                     <Grid item xs><TextField
+                        multiline
+                        rowsMax={4}
                         value={contributionText}
                         onChange={(event) => setContributionText(event.target.value)}
                         className={classes.bodyItem}

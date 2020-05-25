@@ -62,6 +62,8 @@ export default function AddComment(props: Props) {
                 <DialogTitle id="simple-dialog-title">Neuer Kommentar</DialogTitle>
                 <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">
                     <Grid item xs><TextField
+                        multiline
+                        rowsMax={4}
                         value={commentText}
                         onChange={(event) => setCommentText(event.target.value)}
                         className={classes.bodyItem}

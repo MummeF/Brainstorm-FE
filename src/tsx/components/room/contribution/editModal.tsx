@@ -71,6 +71,8 @@ export default function EditModal(props: Props) {
                         <DialogTitle id="simple-dialog-title">Beitrag bearbeiten</DialogTitle>
                         <Grid container className={classes.body} direction="row" justify="space-between" alignItems="flex-end">
                             <Grid item xs><TextField value={contributionText}
+                                multiline
+                                rowsMax={4}
                                 onChange={(event) => setContributionText(event.target.value)}
                                 className={classes.bodyItem}
                                 label="Hier Beitrag bearbeiten"></TextField></Grid>
