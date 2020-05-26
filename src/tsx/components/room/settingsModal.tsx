@@ -55,11 +55,11 @@ export default function SettingsModal(props: Props) {
         <Grid container className={classes.root} direction="column" spacing={1}>
             <Grid item><Typography variant="h4">Thema</Typography></Grid>
             <Grid item><TextField id="topic" helperText="Lege ein Thema für diesen Raum fest!" variant="outlined" size="small" value={state.topic} onChange={event => {
-                setState({ ...props.room, topic: event.target.value })
+                setState({ ...state, topic: event.target.value })
             }} /></Grid>
             <Grid item><Typography variant="h4">Beschreibung</Typography></Grid>
             <Grid item><TextField id="description" helperText="Beschreibe Deinen Raum mit kurzen Worten!" variant="outlined" size="small" value={state.description} onChange={event => {
-                setState({ ...props.room, description: event.target.value })
+                setState({ ...state, description: event.target.value })
             }} /></Grid>
             <Grid item> <Button variant="text" onClick={() => setDeleteOpen(true)} className={classes.deleteBtn} startIcon={<DeleteIcon />}>Close Room</Button></Grid>
         </Grid>

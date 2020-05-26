@@ -3,6 +3,9 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 export interface IVoteFieldProps {
     vote: number;
@@ -11,8 +14,6 @@ export interface IVoteFieldProps {
     hideArrow?: boolean;
     small?: boolean;
 }
-
-
 
 const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldProps) => {
     const styles = makeStyles((theme: Theme) =>
@@ -25,7 +26,16 @@ const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldPr
             },
             root: {
                 height: "100%",
-            }
+            },
+            positive: {
+                color: theme.palette.success.main
+            },
+            negative: {
+                color: theme.palette.error.main
+            },
+            neutral: {
+                color: theme.palette.secondary.main
+            },
 
         })
     );
@@ -33,22 +43,30 @@ const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldPr
 
     return (
         <>
-            <Grid container className={classes.root} direction="column" justify="center" alignItems="center">
+            <Grid container className={classes.root} spacing={props.hideArrow ? 1 : 0} direction={props.hideArrow ? "row" : "column"} justify="center" alignItems="center">
+                {props.hideArrow ?
+                    <Grid item>
+                        {
+                            props.vote > 0 ? <ThumbUpIcon className={classes.positive} />
+                                : props.vote === 0 ? <ThumbsUpDownIcon className={classes.neutral} />
+                                    : <ThumbDownIcon className={classes.negative} />
+                        }
+                    </Grid>
+                    : <Grid className={classes.topItem} item>
+                        <IconButton size="small" onClick={props.onVoteUp}>
+                            <ExpandLessIcon />
+                        </IconButton>
+                    </Grid>
+                }
 
-                <Grid className={classes.topItem} item>
-                    {props.hideArrow ? <></> : <IconButton size="small" onClick={props.onVoteUp}>
-                        <ExpandLessIcon />
-                    </IconButton>}
-                </Grid>
                 <Grid item>
                     <Typography variant="body1">{props.vote}</Typography>
                 </Grid>
-                <Grid className={classes.bottomItem} item>
-                    {props.hideArrow ? <></> : <IconButton size="small" onClick={props.onVoteDown}>
+                {props.hideArrow ? <></> : <Grid className={classes.bottomItem} item>
+                    <IconButton size="small" onClick={props.onVoteDown}>
                         <ExpandMoreIcon />
-                    </IconButton>}
-
-                </Grid>
+                    </IconButton>
+                </Grid>}
             </Grid>
         </>
     );
