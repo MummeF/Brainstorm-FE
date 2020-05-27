@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { v4 as generateRndModId } from 'uuid';
 import PasswordInput from '../components/common/passwordInput';
-import { CRT_ROOM, SET_MOD_PWD, SET_PWD } from '../tools/connections';
+import { CRT_ROOM, SET_MOD_PWD, SET_PWD, isHttps } from '../tools/connections';
 import { getJsonFromBackend, postStringToBackend } from '../tools/fetching';
 
 export interface ICreateRoomProps {
@@ -35,10 +35,10 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
 
   const cookies = new Cookies();
 
-  const setModId: Promise<boolean> = new Promise(async (resolve, reject) => {
+  const setModId: Promise<boolean> = new Promise((resolve, reject) => {
     if (!cookies.get('modId')) {
       const modId: string = generateRndModId();
-      await cookies.set('modId', modId, { sameSite: "lax", path: "/"})
+      cookies.set('modId', modId, { sameSite: "lax", path: "/", secure: isHttps })
       if (!cookies.get(modId)) {
         return reject(false);
       }

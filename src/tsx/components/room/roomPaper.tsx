@@ -102,16 +102,16 @@ export default function RoomPaper(props: Props) {
     })
     const cookies = new Cookies();
 
-    const setModId: Promise<boolean> = new Promise(async (resolve, reject) => {
+    const setModId: Promise<boolean> = new Promise((resolve, reject) => {
         if (!cookies.get('modId')) {
-            const modId: string = generateRndModId();
-            await cookies.set('modId', modId, { sameSite: "lax", path: "/" })
-            if (!cookies.get(modId)) {
-                return reject(false);
-            }
+          const modId: string = generateRndModId();
+          cookies.set('modId', modId, { sameSite: "lax", path: "/", secure: isHttps })
+          if (!cookies.get(modId)) {
+            return reject(false);
+          }
         }
         return resolve(true);
-    })
+      })
 
     useEffect(() => {
         setState(updateState());
