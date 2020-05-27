@@ -2,10 +2,11 @@ import { Button, Dialog, DialogActions, DialogContentText, DialogTitle, Typograp
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 import CheckIcon from '@material-ui/icons/Check';
-import {  getCookiesAccepted, setCookiesAccepted } from '../../tools/cookieService';
+import { getCookiesAccepted, setCookiesAccepted, cookiesAccepted } from '../../tools/cookieService';
 
 
 const CookieModal: React.FunctionComponent = () => {
+    const [open, setOpen] = React.useState(getCookiesAccepted() ? false : true)
 
     const useStyles = makeStyles({
         root: {
@@ -20,11 +21,11 @@ const CookieModal: React.FunctionComponent = () => {
     });
     const classes = useStyles();
 
-    if (getCookiesAccepted()) {
+    if (!open) {
         return null;
     } else {
         return (
-            <Dialog aria-labelledby="simple-dialog-title" open={getCookiesAccepted() ? false : true}>
+            <Dialog aria-labelledby="simple-dialog-title" open={open}>
                 <div className={classes.root}>
                     <DialogTitle id="simple-dialog-title">Cookies</DialogTitle>
                     <div className={classes.body}>
@@ -34,7 +35,11 @@ const CookieModal: React.FunctionComponent = () => {
                         </DialogContentText>
                     </div>
                     <DialogActions>
-                        <Button startIcon={<CheckIcon />} onClick={() => setCookiesAccepted('true')} color="primary" variant="contained">Akzeptieren</Button>
+                        <Button startIcon={<CheckIcon />} onClick={() => setCookiesAccepted('true', (listener) => {
+                            if (listener.name === cookiesAccepted) {
+                                setOpen(listener.value ? false : true);
+                            }
+                        })} color="primary" variant="contained">Akzeptieren</Button>
                     </DialogActions>
                 </div>
             </Dialog>);

@@ -1,22 +1,25 @@
-import Cookies from "universal-cookie";
+import Cookies, { CookieChangeListener } from "universal-cookie";
 import { isHttps } from "./connections";
 import { v4 as generateRndModId } from 'uuid';
 
 
 const cookies = new Cookies();
 
-const cookiesAccepted = 'cookiesAccepted';
-const modId = 'modId';
+export const cookiesAccepted = 'cookiesAccepted';
+export const modId = 'modId';
 
 export function setCookie(cookie: string, value: string) {
     cookies.set(cookie, value, { sameSite: 'lax', path: '/', secure: isHttps })
 }
 
+
+
 export function getCookiesAccepted() {
     return cookies.get(cookiesAccepted);
 }
 
-export function setCookiesAccepted(value: string) {
+export function setCookiesAccepted(value: string, callback: CookieChangeListener) {
+    cookies.addChangeListener(callback);
     setCookie(cookiesAccepted, value);
 }
 
