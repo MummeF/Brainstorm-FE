@@ -11,7 +11,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { Redirect } from "react-router-dom";
 import { v4 as generateRndModId } from 'uuid';
 import MRoom from "../../model/roomModel";
-import { INC_STT, SET_MOD_ID } from "../../tools/connections";
+import { INC_STT, SET_MOD_ID, isHttps } from "../../tools/connections";
 import { getJsonFromBackend } from "../../tools/fetching";
 import StyledMessage from "../common/styledMessage";
 import YesNoOption from "../common/yesNoOption";
