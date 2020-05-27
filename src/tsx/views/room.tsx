@@ -8,7 +8,7 @@ import WebSocketResponse from "../model/websocket/webSocketResponse";
 import { GET_ROOM, HAS_PWD, VAL_ROOM_ID, WS_SUB, WS_TPC, WS_UNSUB, VAL_MOD_ID } from "../tools/connections";
 import { getJsonFromBackend } from "../tools/fetching";
 import WebsocketService from "../tools/websocketService";
-import { useCookies } from "react-cookie";
+import Cookies from "universal-cookie";
 
 interface Props {
     id: number;
@@ -149,7 +149,7 @@ type TParams = { id: string }
 
 export default function Room({ match }: RouteComponentProps<TParams>) {
     const [verified, setVerified] = useState(-1);
-    const [cookies] = useCookies(['modId']);
+    const cookies = new Cookies();
 
     if (match.params) {
         let id: string = match.params.id;
@@ -164,7 +164,7 @@ export default function Room({ match }: RouteComponentProps<TParams>) {
             });
         if (verified !== -1) {
             if (verified === 1) {
-                return <RoomRaw modId={cookies.modId} id={+id}></RoomRaw>
+                return <RoomRaw modId={cookies.get('modId')} id={+id}></RoomRaw>
             } else {
                 return <Redirect to="/enterRoom"></Redirect>
             }

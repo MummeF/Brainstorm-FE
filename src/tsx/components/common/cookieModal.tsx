@@ -2,13 +2,12 @@ import { Button, Dialog, DialogActions, DialogContentText, DialogTitle, Typograp
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 import CheckIcon from '@material-ui/icons/Check';
-import { useCookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 
 const CookieModal: React.FunctionComponent = () => {
-    // const [open, setOpen] = React.useState(true);
-    const [cookies, setCookie] = useCookies(['cookieAccepted']);
-    // const theme = useTheme();
+    const cookies = new Cookies();
+
 
     const useStyles = makeStyles({
         root: {
@@ -22,12 +21,13 @@ const CookieModal: React.FunctionComponent = () => {
         },
     });
     const classes = useStyles();
+    console.log(cookies.get('cookiesAccepted'))
 
-    if (cookies.cookieAccepted) {
+    if (cookies.get('cookiesAccepted')) {
         return null;
     } else {
         return (
-            <Dialog aria-labelledby="simple-dialog-title" open={cookies.cookieAccepted ? false : true}>
+            <Dialog aria-labelledby="simple-dialog-title" open={cookies.get('cookiesAccepted') ? false : true}>
                 <div className={classes.root}>
                     <DialogTitle id="simple-dialog-title">Cookies</DialogTitle>
                     <div className={classes.body}>
@@ -37,7 +37,7 @@ const CookieModal: React.FunctionComponent = () => {
                         </DialogContentText>
                     </div>
                     <DialogActions>
-                        <Button startIcon={<CheckIcon />} onClick={() => setCookie('cookieAccepted', true, { sameSite: "lax", path: "/" })} color="primary" variant="contained">Akzeptieren</Button>
+                        <Button startIcon={<CheckIcon />} onClick={() => cookies.set('cookiesAccepted', 'true', { sameSite: "lax", path: "/" })} color="primary" variant="contained">Akzeptieren</Button>
                     </DialogActions>
                 </div>
             </Dialog>);

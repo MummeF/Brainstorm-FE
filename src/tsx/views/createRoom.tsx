@@ -2,12 +2,11 @@ import { Button, createStyles, FormControlLabel, Grid, Paper, Switch, TextField,
 import { makeStyles } from '@material-ui/styles';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import PasswordInput from '../components/common/passwordInput';
-import { CRT_ROOM, SET_PWD, SET_MOD_PWD } from '../tools/connections';
-import { getJsonFromBackend, postStringToBackend } from '../tools/fetching';
-import { useCookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 import { v4 as generateRndModId } from 'uuid';
-
+import PasswordInput from '../components/common/passwordInput';
+import { CRT_ROOM, SET_MOD_PWD, SET_PWD } from '../tools/connections';
+import { getJsonFromBackend, postStringToBackend } from '../tools/fetching';
 
 export interface ICreateRoomProps {
 
@@ -34,13 +33,13 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
     })
   );
 
-  const [cookies, setCookie] = useCookies(['modId']);
+  const cookies = new Cookies();
 
   const setModId: Promise<boolean> = new Promise(async (resolve, reject) => {
-    if (!cookies.modId) {
+    if (!cookies.get('modId')) {
       const modId: string = generateRndModId();
-      await setCookie('modId', modId, { sameSite: "strict", path: "/", secure: true })
-      if (!cookies.modId) {
+      await cookies.set('modId', modId, { sameSite: "lax", path: "/"})
+      if (!cookies.get(modId)) {
         return reject(false);
       }
     }
@@ -52,7 +51,7 @@ const CreateRoom: React.FunctionComponent<ICreateRoomProps> = (props: ICreateRoo
       setModPwRequired(true);
       return;
     }
-    getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&description=' + description + '&moderatorId=' + cookies.modId)
+    getJsonFromBackend(CRT_ROOM + '?topic=' + topic + '&isPublic=' + publicRoom + '&description=' + description + '&moderatorId=' + cookies.get('modId'))
       .then(res => {
         setRoomId(res);
         setRedirect(true);

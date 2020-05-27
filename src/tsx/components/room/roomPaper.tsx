@@ -7,7 +7,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ShareIcon from '@material-ui/icons/Share';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useCookies } from "react-cookie";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Redirect } from "react-router-dom";
 import { v4 as generateRndModId } from 'uuid';
@@ -20,6 +19,7 @@ import Contribution from "./contribution/contribution";
 import ContributionModal from "./contribution/contributionModal";
 import ModAuthModal from "./ModAuthModal";
 import SettingsModal from "./settingsModal";
+import Cookies from "universal-cookie";
 
 interface Props {
     room: MRoom,
@@ -49,7 +49,6 @@ export default function RoomPaper(props: Props) {
 
     const [state, setState] = useState(updateState())
 
-    const [cookies, setCookie] = useCookies(['modId']);
 
     // const theme = useTheme();
 
@@ -101,13 +100,18 @@ export default function RoomPaper(props: Props) {
     useEffect(() => {
         setRef(isMobile, window.innerWidth < 480)
     })
-    const setModId = () => {
-        if (!cookies.modId) {
-            const modId: string = generateRndModId();
-            setCookie('modId', modId, { sameSite: "lax", path: "/" });
-        }
-    }
+    const cookies = new Cookies();
 
+    const setModId: Promise<boolean> = new Promise(async (resolve, reject) => {
+        if (!cookies.get('modId')) {
+            const modId: string = generateRndModId();
+            await cookies.set('modId', modId, { sameSite: "lax", path: "/" })
+            if (!cookies.get(modId)) {
+                return reject(false);
+            }
+        }
+        return resolve(true);
+    })
 
     useEffect(() => {
         setState(updateState());
@@ -268,8 +272,8 @@ export default function RoomPaper(props: Props) {
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
         <ModAuthModal open={modAuthOpen} id={room.id} handleSuccess={async () => {
             handleModAuthClose();
-            await setModId();
-            getJsonFromBackend(SET_MOD_ID + '?roomId=' + props.room.id + '&moderatorId=' + cookies.modId);
+            setModId.then(res => getJsonFromBackend(SET_MOD_ID + '?roomId=' + props.room.id + '&moderatorId=' + cookies.get('modId')))
+
         }} handleAbort={handleModAuthClose} />
         <ConfirmNextStateModal />
 

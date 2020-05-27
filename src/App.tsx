@@ -3,7 +3,6 @@ import './App.css';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import Root from './Root';
 import { grey } from '@material-ui/core/colors';
-import { CookiesProvider } from 'react-cookie';
 
 
 
@@ -34,9 +33,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <CookiesProvider>
-          <Root />
-        </CookiesProvider>
+        <Root />
       </ThemeProvider>
     </>
   );
