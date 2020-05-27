@@ -9,9 +9,9 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Redirect } from "react-router-dom";
-import { v4 as generateRndModId } from 'uuid';
 import MRoom from "../../model/roomModel";
-import { INC_STT, SET_MOD_ID, isHttps } from "../../tools/connections";
+import { INC_STT, SET_MOD_ID } from "../../tools/connections";
+import { getModId, setRandomModId } from "../../tools/cookieService";
 import { getJsonFromBackend } from "../../tools/fetching";
 import StyledMessage from "../common/styledMessage";
 import YesNoOption from "../common/yesNoOption";
@@ -19,7 +19,6 @@ import Contribution from "./contribution/contribution";
 import ContributionModal from "./contribution/contributionModal";
 import ModAuthModal from "./ModAuthModal";
 import SettingsModal from "./settingsModal";
-import Cookies from "universal-cookie";
 
 interface Props {
     room: MRoom,
@@ -100,18 +99,7 @@ export default function RoomPaper(props: Props) {
     useEffect(() => {
         setRef(isMobile, window.innerWidth < 480)
     })
-    const cookies = new Cookies();
 
-    const setModId: Promise<boolean> = new Promise((resolve, reject) => {
-        if (!cookies.get('modId')) {
-          const modId: string = generateRndModId();
-          cookies.set('modId', modId, { sameSite: "lax", path: "/", secure: isHttps })
-          if (!cookies.get(modId)) {
-            return reject(false);
-          }
-        }
-        return resolve(true);
-      })
 
     useEffect(() => {
         setState(updateState());
@@ -272,7 +260,8 @@ export default function RoomPaper(props: Props) {
         <ContributionModal roomId={room.id} open={contributionOpen} handleClose={handleContsClose}></ContributionModal>
         <ModAuthModal open={modAuthOpen} id={room.id} handleSuccess={async () => {
             handleModAuthClose();
-            setModId.then(res => getJsonFromBackend(SET_MOD_ID + '?roomId=' + props.room.id + '&moderatorId=' + cookies.get('modId')))
+            setRandomModId()
+                .then(res => getJsonFromBackend(SET_MOD_ID + '?roomId=' + props.room.id + '&moderatorId=' + getModId()));
 
         }} handleAbort={handleModAuthClose} />
         <ConfirmNextStateModal />
