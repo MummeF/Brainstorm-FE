@@ -44,6 +44,9 @@ export default function ResultPaper(props: Props) {
         stateField: {
             textAlign: "right",
             width: "100%"
+        },
+        print: {
+            display: "none"
         }
     });
     const classes = useStyles();
@@ -129,6 +132,14 @@ export default function ResultPaper(props: Props) {
 
     const printRef: MutableRefObject<undefined | Printable> = useRef();
 
+    const ToPrint = () => {
+        return (<div>
+            <Typography variant="h3">Ergebnis: {props.room.topic ? props.room.topic : ('Raum ' + props.room.id)}</Typography>
+            <Container />
+
+        </div>);
+    }
+
     return <>
         <Grid container direction="row">
             <Grid item xs={8}>
@@ -149,8 +160,12 @@ export default function ResultPaper(props: Props) {
                 <Typography variant="body1">{props.room.description}</Typography>
             </Grid>
         </Grid>
-        <Printable ref={(ref) => setRef(printRef, ref)}>
-            <Container />
-        </Printable>
+        <Container />
+        <div className={classes.print}>
+            <Printable ref={(ref) => setRef(printRef, ref)}>
+                <ToPrint />
+            </Printable>
+        </div>
+
     </>
 }
