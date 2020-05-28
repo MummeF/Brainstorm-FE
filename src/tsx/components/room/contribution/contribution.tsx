@@ -198,7 +198,7 @@ export default function Contribution(props: Props) {
             <Grid container
                 className={classes.vote}
                 direction="row">
-                {props.roomState !== 0 ? <Grid item xs={props.roomState === 1 ? 1 : 2}>
+                {props.roomState !== 0 ? <Grid item xs={props.roomState === 1 ? 1 : isMobile.current ? 3 : 2}>
                     <VoteField vote={props.contribution.reputation}
                         votedIndicator={votedIndicator}
                         hideArrow={props.roomState === 2}
@@ -206,7 +206,7 @@ export default function Contribution(props: Props) {
                         onVoteUp={voteUp} />
                 </Grid> : <></>}
 
-                <Grid item xs={props.roomState !== 0 ? props.roomState === 1 ? 11 : 10 : 12}>
+                <Grid item xs={props.roomState !== 0 ? props.roomState === 1 ? 11 : isMobile.current ? 9 : 10 : 12}>
                     <CardContent>
 
                         <Grid direction="row"
