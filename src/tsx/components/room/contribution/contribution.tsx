@@ -8,6 +8,7 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import React, { useState } from "react";
 import MContribution from "../../../model/contributionModel";
 import { REM_CTRBT, VT_CTRBT_DN, VT_CTRBT_UP } from "../../../tools/connections";
+import { addVotedContribution, checkIfContributionIsVoted } from "../../../tools/cookieService";
 import getFromBackend, { deleteAndGetJsonFromBackend } from "../../../tools/fetching";
 import CommentSection from "./comment/commentSection";
 import EditModal from "./editModal";
@@ -26,6 +27,12 @@ interface Props {
 export default function Contribution(props: Props) {
     const theme = useTheme();
     const [mobileDialOpen, setMobileDialOpen] = useState(false);
+
+
+    const checkVoted = () => {
+        return checkIfContributionIsVoted(props.roomId, props.contribution.id)
+    }
+    const [votedIndicator, setVotedIndicator] = useState(checkVoted());
 
 
     const isMobile = React.useRef(window.innerWidth < 480);
@@ -90,7 +97,6 @@ export default function Contribution(props: Props) {
     const deleteContribution = () => {
         deleteAndGetJsonFromBackend(REM_CTRBT + '?roomId=' + props.roomId + '&contributionId=' + props.contribution.id);
         setMobileDialOpen(false);
-        // Erfolgreich? Ausgabe
     }
 
     const DeleteAndEditButtons = () => {
@@ -163,15 +169,33 @@ export default function Contribution(props: Props) {
         }
     }
 
+    const voteUp = () => {
+        if (!checkVoted()) {
+            getFromBackend(`${VT_CTRBT_UP}?roomId=${props.roomId}&contributionId=${props.contribution.id}`)
+            addVotedContribution(props.roomId, props.contribution.id, true);
+            setVotedIndicator(checkVoted());
+        }
+    }
+
+
+    const voteDown = () => {
+        if (!checkVoted()) {
+            getFromBackend(`${VT_CTRBT_DN}?roomId=${props.roomId}&contributionId=${props.contribution.id}`)
+            addVotedContribution(props.roomId, props.contribution.id, false);
+            setVotedIndicator(checkVoted());
+        }
+    }
+
     return (<>
         <Card className={classes.root}>
             <Grid container
                 direction="row">
                 {props.roomState !== 0 ? <Grid item xs={1}>
                     <VoteField vote={props.contribution.reputation}
+                        votedIndicator={votedIndicator}
                         hideArrow={props.roomState === 2}
-                        onVoteDown={() => getFromBackend(`${VT_CTRBT_DN}?roomId=${props.roomId}&contributionId=${props.contribution.id}`)}
-                        onVoteUp={() => getFromBackend(`${VT_CTRBT_UP}?roomId=${props.roomId}&contributionId=${props.contribution.id}`)} />
+                        onVoteDown={voteDown}
+                        onVoteUp={voteUp} />
                 </Grid> : <></>}
 
                 <Grid item xs={props.roomState !== 0 ? 11 : 12}>

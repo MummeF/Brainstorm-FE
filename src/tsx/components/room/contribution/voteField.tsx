@@ -6,6 +6,7 @@ import * as React from 'react';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import { VotedComment, VotedContribution } from '../../../tools/cookieService';
 
 export interface IVoteFieldProps {
     vote: number;
@@ -13,6 +14,7 @@ export interface IVoteFieldProps {
     onVoteDown(): void;
     hideArrow?: boolean;
     small?: boolean;
+    votedIndicator?: VotedComment | VotedContribution;
 }
 
 const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldProps) => {
@@ -36,6 +38,12 @@ const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldPr
             neutral: {
                 color: theme.palette.secondary.main
             },
+            votedUp: {
+                color: props.votedIndicator? props.votedIndicator.votedUp ? theme.palette.success.main : "" : ""
+            },
+            votedDown: {
+                color: props.votedIndicator? (!props.votedIndicator.votedUp) ? theme.palette.error.main : "" : ""
+            },
 
         })
     );
@@ -53,7 +61,7 @@ const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldPr
                         }
                     </Grid>
                     : <Grid className={classes.topItem} item>
-                        <IconButton size="small" onClick={props.onVoteUp}>
+                        <IconButton className={classes.votedUp} size="small" onClick={props.onVoteUp}>
                             <ExpandLessIcon />
                         </IconButton>
                     </Grid>
@@ -63,7 +71,7 @@ const VoteField: React.FunctionComponent<IVoteFieldProps> = (props: IVoteFieldPr
                     <Typography variant="body1">{props.vote}</Typography>
                 </Grid>
                 {props.hideArrow ? <></> : <Grid className={classes.bottomItem} item>
-                    <IconButton size="small" onClick={props.onVoteDown}>
+                    <IconButton className={classes.votedDown} size="small" onClick={props.onVoteDown}>
                         <ExpandMoreIcon />
                     </IconButton>
                 </Grid>}

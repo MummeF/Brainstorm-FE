@@ -67,7 +67,7 @@ const CommentSection: React.FunctionComponent<ICommentSectionProps> = (props: IC
                     <Grid className={classes.comments} container item direction="row">
                         {
                             props.contribution.comments?.map(comment => (
-                                <Grid item xs={12}>
+                                <Grid item xs={12} key={comment.id}>
                                     <CommentField roomState={props.roomState} comment={comment} roomId={props.roomId} contributionId={props.contribution.id} />
                                 </Grid>
                             ))

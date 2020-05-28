@@ -118,7 +118,7 @@ export default function RoomPaper(props: Props) {
             if (prevSubject !== cont.subject) {
                 prevSubject = cont.subject;
                 Subject = () => {
-                    return <Grid item xs={12}>
+                    return <Grid key={prevSubject} item xs={12}>
                         <Typography variant="h4">{cont.subject ? cont.subject : "Kein Titel zugeordnet"}</Typography>
                     </Grid>
                 }
@@ -293,6 +293,7 @@ export default function RoomPaper(props: Props) {
                     </Fab>
                 </Grid>
             </Grid>
+            
             <br />
             <Grid
                 container

@@ -5,6 +5,8 @@ import { MComment } from '../../../../model/contributionModel';
 import VoteField from '../voteField';
 import { getJsonFromBackend } from '../../../../tools/fetching';
 import { VT_CMT_UP, VT_CMT_DN } from '../../../../tools/connections';
+import { addVotedComment, checkIfCommentIsVoted } from '../../../../tools/cookieService';
+import { useState } from 'react';
 
 export interface ICommentProps {
     comment: MComment;
@@ -26,18 +28,30 @@ const styles = makeStyles((theme: Theme) =>
 
 const CommentField: React.FunctionComponent<ICommentProps> = (props: ICommentProps) => {
     const classes = styles();
+    const checkVoted = () => {
+        return checkIfCommentIsVoted(props.roomId, props.contributionId, props.comment.id);
+    }
+    const [votedIndicator, setVotedIndicator] = useState(checkVoted());
     const voteUp = () => {
-        getJsonFromBackend(`${VT_CMT_UP}?roomId=${props.roomId}&contributionId=${props.contributionId}&commentId=${props.comment.id}`);
+        if (!checkVoted()) {
+            getJsonFromBackend(`${VT_CMT_UP}?roomId=${props.roomId}&contributionId=${props.contributionId}&commentId=${props.comment.id}`);
+            addVotedComment(props.roomId, props.contributionId, props.comment.id, true);
+            setVotedIndicator(checkVoted());
+        }
     }
     const voteDown = () => {
-        getJsonFromBackend(`${VT_CMT_DN}?roomId=${props.roomId}&contributionId=${props.contributionId}&commentId=${props.comment.id}`);
+        if (!checkVoted()) {
+            getJsonFromBackend(`${VT_CMT_DN}?roomId=${props.roomId}&contributionId=${props.contributionId}&commentId=${props.comment.id}`);
+            addVotedComment(props.roomId, props.contributionId, props.comment.id, false);
+            setVotedIndicator(checkVoted());
+        }
     }
 
     return (
         <>
             <Grid className={classes.root} container direction="row">
                 <Grid item xs={1}>
-                    <VoteField hideArrow={props.roomState === 2} small vote={props.comment.reputation} onVoteDown={voteDown} onVoteUp={voteUp} />
+                    <VoteField votedIndicator={votedIndicator} hideArrow={props.roomState === 2} small vote={props.comment.reputation} onVoteDown={voteDown} onVoteUp={voteUp} />
                 </Grid>
                 <Grid item xs={11} className={classes.commentText}>
                     <Typography variant="body2">{props.comment.content}</Typography>
