@@ -19,7 +19,7 @@ export default function Root() {
         root: {
             margin: "auto",
             marginBottom: "2.5em",
-            width: isMobile.current ? "90%" : "75%",
+            width: isMobile.current ? "85%" : "75%",
         },
     });
 
