@@ -46,7 +46,6 @@ class ResultRaw extends React.Component<Props, State> {
             return <Redirect to="/" />
         }
         if (this.state.room) {
-            console.log(this.state.room)
             return <>
                 <ResultPaper room={this.state.room!}></ResultPaper>
             </>

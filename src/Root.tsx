@@ -1,13 +1,13 @@
 import { makeStyles, setRef } from "@material-ui/core";
 import React, { useState } from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
+import CookieModal from "./tsx/components/common/cookieModal";
 import CustomLoader from "./tsx/components/common/customLoader";
 import Footer from "./tsx/components/common/footer";
 import GlobalHint from "./tsx/components/common/globalHint";
 import Header from "./tsx/components/common/header";
 import Routes from "./tsx/navigation/routes";
 import { backendOnline } from "./tsx/tools/fetching";
-import CookieModal from "./tsx/components/common/cookieModal";
 
 export default function Root() {
     // const theme = useTheme();
@@ -26,6 +26,12 @@ export default function Root() {
     const classes = useStyles();
     const [online, setOnline] = useState(false);
     const [loading, setLoading] = useState(true);
+
+
+    // console.log(window.location.hostname)
+    // if (!isHttps && window.location.hostname === 'localhost') {
+    //     window.location.replace(`https:${location.href.substring(location.protocol.length)}`);
+    // }
 
     backendOnline().then(res => {
         setOnline(res);

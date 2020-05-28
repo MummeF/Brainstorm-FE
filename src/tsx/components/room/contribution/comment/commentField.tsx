@@ -50,10 +50,10 @@ const CommentField: React.FunctionComponent<ICommentProps> = (props: ICommentPro
     return (
         <>
             <Grid className={classes.root} container direction="row">
-                <Grid item xs={1}>
+                <Grid item xs={props.roomState === 1 ? 1 : 2}>
                     <VoteField votedIndicator={votedIndicator} hideArrow={props.roomState === 2} small vote={props.comment.reputation} onVoteDown={voteDown} onVoteUp={voteUp} />
                 </Grid>
-                <Grid item xs={11} className={classes.commentText}>
+                <Grid item xs={props.roomState === 1 ? 11 : 10} className={classes.commentText}>
                     <Typography variant="body2">{props.comment.content}</Typography>
                 </Grid>
             </Grid>

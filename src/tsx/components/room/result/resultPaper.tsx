@@ -71,7 +71,7 @@ export default function ResultPaper(props: Props) {
             return <>
                 <Subject />
                 <Grid item key={cont.id} xs={isMobile.current ? 12 : 6}>
-                    <Contribution roomState={2} roomId={props.room.id} contribution={cont}></Contribution>
+                    <Contribution isMod={false} roomState={2} roomId={props.room.id} contribution={cont}></Contribution>
                 </Grid>
             </>
         }

@@ -1,8 +1,9 @@
+import { createMuiTheme, ThemeProvider } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import React from 'react';
 import './App.css';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core';
 import Root from './Root';
-import { grey } from '@material-ui/core/colors';
+import HttpsRedirect from 'react-https-redirect';
 
 
 
@@ -32,9 +33,11 @@ const theme = createMuiTheme({
 function App() {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Root />
-      </ThemeProvider>
+      <HttpsRedirect>
+        <ThemeProvider theme={theme}>
+          <Root />
+        </ThemeProvider>
+      </HttpsRedirect>
     </>
   );
 }

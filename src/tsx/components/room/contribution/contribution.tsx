@@ -20,6 +20,7 @@ import VoteField from "./voteField";
 interface Props {
     contribution: MContribution;
     roomId: number;
+    isMod: boolean;
     roomState?: number;
     subjects?: string[];
 }
@@ -59,6 +60,9 @@ export default function Contribution(props: Props) {
         commentPanel: {
             maxHeight: "10em",
             width: "100%",
+        },
+        vote: {
+            paddingLeft: "0.5em"
         }
 
     });
@@ -120,13 +124,14 @@ export default function Contribution(props: Props) {
                             <EditIcon />
                         </IconButton>
                     </Grid>
-                    <Grid item xs={4}>
+                    {props.isMod ? <Grid item xs={4}>
                         <IconButton size="small"
                             onClick={deleteContribution}
                             className={classes.deleteBtn}>
                             <DeleteIcon />
                         </IconButton>
-                    </Grid>
+                    </Grid> : <></>}
+
 
                 </Grid>;
             } else {
@@ -144,13 +149,15 @@ export default function Contribution(props: Props) {
                 open={dialOpen}
                 direction="left"
             >
-                <SpeedDialAction
-                    className={classes.deleteBtn}
-                    key="Delete"
-                    icon={<DeleteIcon />}
-                    tooltipTitle="Delete"
-                    onClick={deleteContribution}
-                />
+                {props.isMod ?
+                    <SpeedDialAction
+                        className={classes.deleteBtn}
+                        key="Delete"
+                        icon={<DeleteIcon />}
+                        tooltipTitle="Delete"
+                        onClick={deleteContribution}
+                    />
+                    : <></>}
                 <SpeedDialAction
                     className={classes.editBtn}
                     key="Edit"
@@ -189,8 +196,9 @@ export default function Contribution(props: Props) {
     return (<>
         <Card className={classes.root}>
             <Grid container
+                className={classes.vote}
                 direction="row">
-                {props.roomState !== 0 ? <Grid item xs={1}>
+                {props.roomState !== 0 ? <Grid item xs={props.roomState === 1 ? 1 : 2}>
                     <VoteField vote={props.contribution.reputation}
                         votedIndicator={votedIndicator}
                         hideArrow={props.roomState === 2}
@@ -198,7 +206,7 @@ export default function Contribution(props: Props) {
                         onVoteUp={voteUp} />
                 </Grid> : <></>}
 
-                <Grid item xs={props.roomState !== 0 ? 11 : 12}>
+                <Grid item xs={props.roomState !== 0 ? props.roomState === 1 ? 11 : 10 : 12}>
                     <CardContent>
 
                         <Grid direction="row"
@@ -213,8 +221,6 @@ export default function Contribution(props: Props) {
                         </Grid>
                     </CardContent>
                 </Grid>
-
-
             </Grid>
             {props.roomState !== 0 ? <Grid direction="row"
                 container

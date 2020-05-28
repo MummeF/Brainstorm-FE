@@ -126,7 +126,7 @@ export default function RoomPaper(props: Props) {
             return <>
                 <Subject />
                 <Grid item key={cont.id} className={classes.contribution} xs={isMobile.current ? 12 : 6}>
-                    <Contribution subjects={subjects} roomState={state} roomId={room.id} contribution={cont}></Contribution>
+                    <Contribution isMod={props.isMod} subjects={subjects} roomState={state} roomId={room.id} contribution={cont}></Contribution>
                 </Grid>
             </>
         }
@@ -293,7 +293,7 @@ export default function RoomPaper(props: Props) {
                     </Fab>
                 </Grid>
             </Grid>
-            
+
             <br />
             <Grid
                 container
